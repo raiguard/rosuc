@@ -1,0 +1,5 @@
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Allman
+ColumnLimit: 120
+SortIncludes: CaseInsensitive
+PointerAlignment: Left
