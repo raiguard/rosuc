@@ -27,15 +27,25 @@ void ZipReader::setPattern(const char* pattern)
   mz_zip_reader_set_pattern(this->zip_reader, pattern, 0);
 }
 
-void ZipReader::gotoFirstEntry()
+bool ZipReader::gotoFirstEntry()
 {
   if (mz_zip_reader_goto_first_entry(this->zip_reader) == MZ_END_OF_LIST)
-    throw std::runtime_error("Reached end of zip file");
+    return false;
   if (mz_zip_reader_entry_get_info(zip_reader, &this->entryInfo) == MZ_OK)
     fmt::println("Zip first entry: {}", this->entryInfo->filename);
+  return true;
 }
 
-void ZipReader::readEntry()
+bool ZipReader::gotoNextEntry()
+{
+  if (mz_zip_reader_goto_next_entry(this->zip_reader) == MZ_END_OF_LIST)
+    return false;
+  if (mz_zip_reader_entry_get_info(zip_reader, &this->entryInfo) == MZ_OK)
+    fmt::println("Zip next entry: {}", this->entryInfo->filename);
+  return true;
+}
+
+std::string ZipReader::readEntry()
 {
   if (!this->entryInfo)
     Util::panic("Attempted to read zip entry without entry being open");
@@ -45,10 +55,10 @@ void ZipReader::readEntry()
 
   std::vector<char> buf;
   buf.resize(this->entryInfo->uncompressed_size);
-  int32_t bytes_read = 0;
+  uint32_t bytes_read = 0;
   bytes_read = mz_zip_reader_entry_read(this->zip_reader, buf.data(), buf.size());
   if (bytes_read < buf.size())
     Util::panic("Didn't read whole zip entry: expected {}, got {}", buf.size(), bytes_read);
   mz_zip_reader_entry_close(this->zip_reader);
-  this->entryContent = std::string(buf.data());
+  return std::string(buf.data());
 }

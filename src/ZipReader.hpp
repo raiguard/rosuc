@@ -10,13 +10,12 @@ public:
   ~ZipReader();
 
   void setPattern(const char* pattern);
-  void gotoFirstEntry();
-  void readEntry();
-  const std::string& getEntryContent() { return this->entryContent; }
+  bool gotoFirstEntry();
+  bool gotoNextEntry();
+  std::string readEntry();
 
 private:
   std::filesystem::path path;
   void* zip_reader;
   mz_zip_file* entryInfo;
-  std::string entryContent;
 };

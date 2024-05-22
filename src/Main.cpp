@@ -1,18 +1,8 @@
-#include "ZipReader.hpp"
+#include "Beatmap/Beatmap.hpp"
 #include <fmt/format.h>
 #include <SDL3/SDL.h>
 
 const char* PATH = "beatmaps/404649 yuikonnu - Yume Chizu [no video].zip";
-
-void readBeatmap(const std::filesystem::path& path)
-{
-  ZipReader reader(path);
-  reader.setPattern("*.osu");
-  reader.gotoFirstEntry();
-  reader.readEntry();
-
-  fmt::println("{}", reader.getEntryContent());
-}
 
 int main()
 {
@@ -28,7 +18,7 @@ int main()
   if (!renderer)
     throw std::runtime_error(fmt::format("Failed to create SDL renderer: {}", SDL_GetError()));
 
-  readBeatmap(PATH);
+  Beatmap beatmap(PATH);
 
   bool quit = false;
   while (!quit)
