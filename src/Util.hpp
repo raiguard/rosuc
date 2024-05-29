@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <fmt/core.h>
 
 namespace Util
@@ -9,4 +10,6 @@ namespace Util
   {
     throw std::runtime_error(fmt::format(format, std::forward<T>(args)...));
   }
+
+  std::string readFile(const std::filesystem::path& path);
 }
