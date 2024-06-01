@@ -4,6 +4,7 @@ project('rosuc', 'c', 'cpp',
 fmt = dependency('fmt')
 minizip = dependency('minizip')
 sdl = dependency('sdl3')
+
 imgui = subproject('imgui')
 
 # criterion_proj = subproject('criterion')
