@@ -12,7 +12,6 @@ Beatmap::Beatmap(const std::filesystem::path& path)
   if (!reader.gotoFirstEntry())
     Util::panic("Failed to read entry from beatmap file");
 
-  do
-    this->difficulties.emplace_back(reader.readEntry());
+  do this->difficulties.emplace_back(reader.readEntry());
   while (reader.gotoNextEntry());
 }

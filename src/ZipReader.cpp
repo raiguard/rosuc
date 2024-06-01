@@ -1,5 +1,5 @@
-#include "Util.hpp"
 #include "ZipReader.hpp"
+#include "Util.hpp"
 #include <fmt/core.h>
 #include <mz.h>
 #include <mz_strm.h>
@@ -13,7 +13,6 @@ ZipReader::ZipReader(const std::filesystem::path& path)
 {
   if (int32_t err = mz_zip_reader_open_file(this->zip_reader, path.c_str()); err != MZ_OK)
     throw std::runtime_error(fmt::format("Failed to read zip file: error code {}", err));
-
 }
 
 ZipReader::~ZipReader()

@@ -10,6 +10,7 @@ public:
   ~Window();
 
   void draw();
+
 private:
   SDL_Window* sdlWindow;
   SDL_Renderer* sdlRenderer;

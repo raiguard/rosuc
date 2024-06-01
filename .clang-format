@@ -1,5 +1,16 @@
+AlignAfterOpenBracket: true
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLambdasOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
 AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Allman
+BreakConstructorInitializers: BeforeComma
 ColumnLimit: 120
-SortIncludes: CaseInsensitive
+ConstructorInitializerIndentWidth: 2
+FixNamespaceComments: false
+NamespaceIndentation: All
+PackConstructorInitializers: Never
 PointerAlignment: Left
+SortIncludes: CaseInsensitive

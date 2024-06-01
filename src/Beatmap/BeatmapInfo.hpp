@@ -5,8 +5,9 @@ class BeatmapInfo
 {
 public:
   BeatmapInfo(const std::string& data);
+
 private:
-  std::string title;;
+  std::string title;
   std::string titleUnicode;
   std::string artist;
   std::string artistUnicode;

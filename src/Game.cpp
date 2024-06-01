@@ -29,6 +29,7 @@ Game::ShouldQuit Game::frame()
 
   accumulator += frameTime;
 
+  // TODO: Handle input or rendering on a separate thread to make input precision FPS-agnostic
   if (this->handleEvents())
     return true;
 
