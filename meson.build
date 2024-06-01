@@ -4,6 +4,7 @@ project('rosuc', 'c', 'cpp',
 fmt = dependency('fmt')
 minizip = dependency('minizip')
 sdl = dependency('sdl3')
+imgui = subproject('imgui')
 
 # criterion_proj = subproject('criterion')
 # criterion_dep = criterion_proj.get_variable('criterion')
@@ -11,6 +12,6 @@ sdl = dependency('sdl3')
 c = run_command('scripts/find_sources.sh', check: true)
 sources = c.stdout().strip().split('\n')
 executable('rosuc', sources,
-           dependencies: [fmt, sdl, minizip],
+           dependencies: [fmt, sdl, minizip, imgui.get_variable('imgui_dep')],
            include_directories: 'src',
            cpp_args: ['-Wall', '-Werror'])

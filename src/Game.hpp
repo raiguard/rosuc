@@ -11,12 +11,14 @@ class Game
 public:
   using ShouldQuit = bool;
 
-  Beatmap& readBeatmap(std::filesystem::path path);
+  void initBeatmaps(const std::filesystem::path& path);
   void initWindow();
   ShouldQuit frame();
 
+
 private:
   ShouldQuit handleEvents();
+  void drawDebugGui();
 
   std::vector<Beatmap> beatmaps;
   std::unique_ptr<Window> window;

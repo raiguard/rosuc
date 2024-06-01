@@ -6,7 +6,11 @@ class BeatmapInfo
 public:
   BeatmapInfo(const std::string& data);
 
-private:
+  bool isValid()
+  {
+    return !title.empty();
+  }
+
   std::string title;
   std::string titleUnicode;
   std::string artist;

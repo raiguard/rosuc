@@ -30,8 +30,8 @@ bool ZipReader::gotoFirstEntry()
 {
   if (mz_zip_reader_goto_first_entry(this->zip_reader) == MZ_END_OF_LIST)
     return false;
-  if (mz_zip_reader_entry_get_info(zip_reader, &this->entryInfo) == MZ_OK)
-    fmt::println("Zip first entry: {}", this->entryInfo->filename);
+  if (mz_zip_reader_entry_get_info(zip_reader, &this->entryInfo) != MZ_OK)
+    Util::panic("Failed to go to first zip entry");
   return true;
 }
 
@@ -39,8 +39,8 @@ bool ZipReader::gotoNextEntry()
 {
   if (mz_zip_reader_goto_next_entry(this->zip_reader) == MZ_END_OF_LIST)
     return false;
-  if (mz_zip_reader_entry_get_info(zip_reader, &this->entryInfo) == MZ_OK)
-    fmt::println("Zip next entry: {}", this->entryInfo->filename);
+  if (mz_zip_reader_entry_get_info(zip_reader, &this->entryInfo) != MZ_OK)
+    Util::panic("Failed to go to next zip entry");
   return true;
 }
 

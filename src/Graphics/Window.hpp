@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 typedef struct SDL_Window SDL_Window;
 typedef struct SDL_Renderer SDL_Renderer;
 
@@ -9,7 +10,13 @@ public:
   Window();
   ~Window();
 
-  void draw();
+  void beginDrawing();
+  void finishDrawing();
+
+  void drawDebugGui();
+
+  std::pair<int, int> getTrueSize();
+  std::pair<int, int> getScaledSize();
 
 private:
   SDL_Window* sdlWindow;
