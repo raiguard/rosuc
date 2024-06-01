@@ -1,4 +1,5 @@
 #pragma once
+
 #include <filesystem>
 
 typedef struct mz_zip_file_s mz_zip_file, mz_zip_entry;

@@ -13,4 +13,4 @@ sources = c.stdout().strip().split('\n')
 executable('rosuc', sources,
            dependencies: [fmt, sdl, minizip],
            include_directories: 'src',
-           cpp_args: '-Wall')
+           cpp_args: ['-Wall', '-Werror'])
