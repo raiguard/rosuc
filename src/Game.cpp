@@ -84,8 +84,9 @@ void Game::drawDebugGui()
   ImGui::Begin("Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
   ImGui::Text("Video driver: %s", SDL_GetCurrentVideoDriver());
   ImGui::Text("Render: %.1f FPS (%.3f ms/frame)", io.Framerate, 1000.0f / io.Framerate);
-  // if (ImGui::Checkbox("Use vsync", &this->useVsync))
-  //   SDL_SetRenderVSync(this->useVsync ? 1 : 0);
+  static bool useVsync = true;
+  if (ImGui::Checkbox("Use vsync", &useVsync))
+    window->setVsync(useVsync);
   auto trueSize = window->getTrueSize();
   ImGui::Text("True resolution: %dx%d", trueSize.first, trueSize.second);
   auto scaledSize = window->getScaledSize();

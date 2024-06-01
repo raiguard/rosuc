@@ -13,6 +13,8 @@ public:
   void beginDrawing();
   void finishDrawing();
 
+  void setVsync(bool value);
+
   void drawDebugGui();
 
   std::pair<int, int> getTrueSize();

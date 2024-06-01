@@ -56,6 +56,11 @@ void Window::finishDrawing()
   SDL_RenderPresent(this->sdlRenderer);
 }
 
+void Window::setVsync(bool value)
+{
+  SDL_SetRenderVSync(this->sdlRenderer, value);
+}
+
 std::pair<int, int> Window::getTrueSize()
 {
   int width, height;
