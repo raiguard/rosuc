@@ -96,6 +96,6 @@ void Game::drawDebugGui()
   ImGui::Begin("Beatmaps");
   for (const Beatmap& beatmap : this->beatmaps)
     for (const BeatmapInfo& difficulty : beatmap.getDifficulties())
-      ImGui::Text("%s", difficulty.title.c_str());
+      ImGui::Text("%s (%s)", difficulty.title.c_str(), difficulty.version.c_str());
   ImGui::End();
 }

@@ -1,8 +1,8 @@
 #include "Window.hpp"
 #include "Util.hpp"
-#include <imgui_impl_sdlrenderer3.h>
-#include <imgui_impl_sdl3.h>
 #include <imgui.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_sdlrenderer3.h>
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_render.h>
 
@@ -12,7 +12,7 @@ Window::Window()
   if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO) != 0)
     Util::panic("Failed to initialize SDL: {}", SDL_GetError());
 
-  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 800, 600, SDL_WINDOW_RESIZABLE);
   if (!this->sdlWindow)
     Util::panic("Failed to create SDL window: {}", SDL_GetError());
 
