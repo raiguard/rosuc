@@ -99,8 +99,6 @@ void Game::drawDebugGui()
   auto scaledSize = window->getScaledSize();
   ImGui::Text("Scaled resolution: %dx%d", scaledSize.first, scaledSize.second);
   ImGui::Text("Display density: %fx", double(trueSize.first) / scaledSize.first);
-  if (this->activeBeatmap)
-    ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
   ImGui::End();
 
   ImGui::Begin("Beatmaps");
@@ -108,6 +106,8 @@ void Game::drawDebugGui()
   ImGui::Text("Search:");
   ImGui::SameLine();
   ImGui::InputText("##", &searchText);
+  if (this->activeBeatmap)
+    ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
   for (const Beatmap& beatmap : this->beatmaps)
     for (const BeatmapInfo& difficulty : beatmap.getDifficulties())
     {
