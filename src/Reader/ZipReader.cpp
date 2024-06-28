@@ -12,7 +12,7 @@ ZipReader::ZipReader(const std::filesystem::path& path)
   , zip_reader(mz_zip_reader_create())
 {
   if (int32_t err = mz_zip_reader_open_file(this->zip_reader, path.c_str()); err != MZ_OK)
-    throw std::runtime_error(fmt::format("Failed to read zip file: error code {}", err));
+    Util::panic("Failed to read zip file: error code {}", err);
 }
 
 ZipReader::~ZipReader()

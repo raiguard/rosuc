@@ -14,11 +14,16 @@ void Game::initBeatmaps(const std::filesystem::path& path)
   if (!std::filesystem::is_directory(path))
     Util::panic("'{}' is not a directory.", path.c_str());
 
+  uint32_t i = 0;
   for (const auto& entry : std::filesystem::directory_iterator(path))
-  {
     if (entry.is_regular_file() && entry.path().extension() == ".osz")
-      this->beatmaps.emplace_back(entry.path());
-  }
+    {
+      Beatmap beatmap(entry.path());
+      i += beatmap.getDifficulties().size();
+      this->beatmaps.emplace_back(std::move(beatmap));
+    }
+
+  fmt::println("Finished loading {} beatmaps", i);
 }
 
 void Game::initWindow()
