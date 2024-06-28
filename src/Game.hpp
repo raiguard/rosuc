@@ -24,4 +24,6 @@ private:
   std::unique_ptr<Window> window;
 
   static constexpr uint32_t UPS = 1000;
+
+  std::optional<BeatmapInfo> activeBeatmap;
 };

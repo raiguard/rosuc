@@ -99,6 +99,8 @@ void Game::drawDebugGui()
   auto scaledSize = window->getScaledSize();
   ImGui::Text("Scaled resolution: %dx%d", scaledSize.first, scaledSize.second);
   ImGui::Text("Display density: %fx", double(trueSize.first) / scaledSize.first);
+  if (this->activeBeatmap)
+    ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
   ImGui::End();
 
   ImGui::Begin("Beatmaps");
@@ -112,7 +114,9 @@ void Game::drawDebugGui()
       if (!searchText.empty() && !difficulty.title.contains(searchText))
         continue;
 
-      ImGui::Text("%s (%s)", difficulty.title.c_str(), difficulty.version.c_str());
+      if (ImGui::Button(std::format("{} ({})", difficulty.title.c_str(), difficulty.version.c_str()).c_str()))
+        // TODO: Figure out why taking a pointer here results in garbage.
+        this->activeBeatmap = difficulty;
     }
   ImGui::End();
 }
