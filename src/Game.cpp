@@ -2,6 +2,7 @@
 #include "Graphics/Window.hpp"
 #include "Util.hpp"
 #include <imgui_impl_sdl3.h>
+#include <imgui_stdlib.h>
 #include <print>
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_render.h>
@@ -101,8 +102,17 @@ void Game::drawDebugGui()
   ImGui::End();
 
   ImGui::Begin("Beatmaps");
+  static std::string searchText;
+  ImGui::Text("Search:");
+  ImGui::SameLine();
+  ImGui::InputText("##", &searchText);
   for (const Beatmap& beatmap : this->beatmaps)
     for (const BeatmapInfo& difficulty : beatmap.getDifficulties())
+    {
+      if (!searchText.empty() && !difficulty.title.contains(searchText))
+        continue;
+
       ImGui::Text("%s (%s)", difficulty.title.c_str(), difficulty.version.c_str());
+    }
   ImGui::End();
 }
