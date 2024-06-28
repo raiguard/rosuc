@@ -1,4 +1,5 @@
 #include "Util.hpp"
+#include <cstring>
 #include <fstream>
 #include <string>
 

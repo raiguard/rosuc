@@ -1,6 +1,5 @@
 #include "BeatmapInfo.hpp"
 #include "Util.hpp"
-#include <fmt/core.h>
 #include <sstream>
 
 void trimString(std::string& s)
@@ -29,7 +28,6 @@ BeatmapInfo::BeatmapInfo(const std::string& data)
   trimString(line);
   if (line != "osu file format v14" && line != "osu file format v14\r")
   {
-    // fmt::println("Invalid beatmap difficulty. First line is '{}'", line);
     return;
   }
 

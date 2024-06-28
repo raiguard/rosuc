@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include <fmt/format.h>
 #include <SDL3/SDL.h>
 
 int main()

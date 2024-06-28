@@ -1,6 +1,5 @@
 #include "ZipReader.hpp"
 #include "Util.hpp"
-#include <fmt/core.h>
 #include <mz.h>
 #include <mz_strm.h>
 #include <mz_zip.h>

@@ -1,9 +1,10 @@
 #include "Game.hpp"
 #include "Graphics/Window.hpp"
 #include "Util.hpp"
-#include <SDL3/SDL_render.h>
 #include <imgui_impl_sdl3.h>
+#include <print>
 #include <SDL3/SDL_events.h>
+#include <SDL3/SDL_render.h>
 #include <thread>
 
 void Game::initBeatmaps(const std::filesystem::path& path)
@@ -23,7 +24,7 @@ void Game::initBeatmaps(const std::filesystem::path& path)
       this->beatmaps.emplace_back(std::move(beatmap));
     }
 
-  fmt::println("Finished loading {} beatmaps", i);
+  std::println("Finished loading {} beatmaps", i);
 }
 
 void Game::initWindow()
