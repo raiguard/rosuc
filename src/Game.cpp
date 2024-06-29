@@ -108,13 +108,15 @@ void Game::drawDebugGui()
   ImGui::InputText("##", &searchText);
   if (this->activeBeatmap)
     ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
+  uint32_t i = 0;
   for (const Beatmap& beatmap : this->beatmaps)
     for (const BeatmapInfo& difficulty : beatmap.getDifficulties())
     {
+      i++;
       if (!searchText.empty() && !difficulty.title.contains(searchText))
         continue;
 
-      if (ImGui::Button(std::format("{} ({})", difficulty.title.c_str(), difficulty.version.c_str()).c_str()))
+      if (ImGui::Button(std::format("{} ({})##{}", difficulty.title.c_str(), difficulty.version.c_str(), i).c_str()))
         // TODO: Figure out why taking a pointer here results in garbage.
         this->activeBeatmap = difficulty;
     }
