@@ -1,8 +1,6 @@
 #pragma once
-
+#include <SDL3/SDL_video.h>
 #include <utility>
-typedef struct SDL_Window SDL_Window;
-typedef struct SDL_Renderer SDL_Renderer;
 
 class Window
 {
@@ -22,5 +20,5 @@ public:
 
 private:
   SDL_Window* sdlWindow;
-  SDL_Renderer* sdlRenderer;
+  SDL_GLContext glContext;
 };

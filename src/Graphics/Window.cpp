@@ -1,10 +1,13 @@
 #include "Window.hpp"
 #include "Util.hpp"
+#include <glad/glad.h>
 #include <imgui.h>
+#include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl3.h>
-#include <imgui_impl_sdlrenderer3.h>
+#include <print>
 #include <SDL3/SDL_init.h>
-#include <SDL3/SDL_render.h>
+#include <SDL3/SDL_opengl.h>
+#include <SDL3/SDL_video.h>
 
 Window::Window()
 {
@@ -12,38 +15,41 @@ Window::Window()
   if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO) != 0)
     Util::panic("Failed to initialize SDL: {}", SDL_GetError());
 
-  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 800, 600, SDL_WINDOW_RESIZABLE);
+  SDL_GL_LoadLibrary(nullptr);
+
+  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
   if (!this->sdlWindow)
     Util::panic("Failed to create SDL window: {}", SDL_GetError());
 
-  this->sdlRenderer = SDL_CreateRenderer(this->sdlWindow, nullptr);
-  if (!this->sdlRenderer)
-    Util::panic("Failed to create SDL renderer: {}", SDL_GetError());
+  this->glContext = SDL_GL_CreateContext(this->sdlWindow);
+  if (!this->glContext)
+    Util::panic("Failed to create OpenGL context: {}", SDL_GetError());
 
-  SDL_SetRenderVSync(this->sdlRenderer, 1);
+  gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
+  std::println("OpenGL version: {}", (const char*)(glGetString(GL_VERSION)));
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
 
-  ImGui_ImplSDL3_InitForSDLRenderer(this->sdlWindow, this->sdlRenderer);
-  ImGui_ImplSDLRenderer3_Init(this->sdlRenderer);
+  ImGui_ImplSDL3_InitForOpenGL(this->sdlWindow, this->glContext);
+  ImGui_ImplOpenGL3_Init();
 }
 
 Window::~Window()
 {
-  ImGui_ImplSDLRenderer3_Shutdown();
+  ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplSDL3_Shutdown();
   ImGui::DestroyContext();
 
-  SDL_DestroyRenderer(this->sdlRenderer);
+  SDL_GL_DeleteContext(this->glContext);
   SDL_DestroyWindow(this->sdlWindow);
   SDL_Quit();
 }
 
 void Window::beginDrawing()
 {
-  ImGui_ImplSDLRenderer3_NewFrame();
+  ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplSDL3_NewFrame();
   ImGui::NewFrame();
 }
@@ -51,14 +57,17 @@ void Window::beginDrawing()
 void Window::finishDrawing()
 {
   ImGui::Render();
-  SDL_RenderClear(this->sdlRenderer);
-  ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), this->sdlRenderer);
-  SDL_RenderPresent(this->sdlRenderer);
+  auto dimensions = this->getTrueSize();
+  glViewport(0, 0, dimensions.first, dimensions.second);
+  glClearColor(0, 0, 0, 255);
+  glClear(GL_COLOR_BUFFER_BIT);
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  SDL_GL_SwapWindow(this->sdlWindow);
 }
 
 void Window::setVsync(bool value)
 {
-  SDL_SetRenderVSync(this->sdlRenderer, value);
+  SDL_GL_SetSwapInterval(value ? 1 : 0);
 }
 
 std::pair<int, int> Window::getTrueSize()
