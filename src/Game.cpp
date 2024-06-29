@@ -11,7 +11,10 @@
 void Game::initBeatmaps(const std::filesystem::path& path)
 {
   if (!std::filesystem::exists(path))
-    Util::panic("Unknown path '{}'", path.c_str());
+  {
+    std::println("Cannot load beatmaps at '{}': directory does not exist.", path.c_str());
+    return;
+  }
 
   if (!std::filesystem::is_directory(path))
     Util::panic("'{}' is not a directory.", path.c_str());
