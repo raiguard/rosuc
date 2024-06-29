@@ -103,6 +103,7 @@ void Game::drawDebugGui()
   ImGui::Text("Scaled resolution: %dx%d", scaledWidth, scaledHeight);
   ImGui::Text("Display density: %fx", double(trueWidth) / double(scaledWidth));
   ImGui::Text("Display scale (SDL): %fx", this->window->getDisplayScale());
+  ImGui::Text("Pixel density (SDL): %fx", this->window->getPixelDensity());
   ImGui::End();
 
   ImGui::Begin("Beatmaps");

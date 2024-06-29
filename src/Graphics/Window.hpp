@@ -16,6 +16,7 @@ public:
   void drawDebugGui();
 
   float getDisplayScale();
+  float getPixelDensity();
 
   std::pair<int, int> getTrueSize();
   std::pair<int, int> getScaledSize();

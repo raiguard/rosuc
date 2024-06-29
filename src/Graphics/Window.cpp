@@ -88,3 +88,8 @@ float Window::getDisplayScale()
 {
   return SDL_GetWindowDisplayScale(this->sdlWindow);
 }
+
+float Window::getPixelDensity()
+{
+  return SDL_GetWindowPixelDensity(this->sdlWindow);
+}
