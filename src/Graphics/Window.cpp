@@ -17,7 +17,7 @@ Window::Window()
 
   SDL_GL_LoadLibrary(nullptr);
 
-  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY);
   if (!this->sdlWindow)
     Util::panic("Failed to create SDL window: {}", SDL_GetError());
 
