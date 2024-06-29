@@ -94,11 +94,12 @@ void Game::drawDebugGui()
   static bool useVsync = true;
   if (ImGui::Checkbox("Use vsync", &useVsync))
     window->setVsync(useVsync);
-  auto trueSize = window->getTrueSize();
-  ImGui::Text("True resolution: %dx%d", trueSize.first, trueSize.second);
-  auto scaledSize = window->getScaledSize();
-  ImGui::Text("Scaled resolution: %dx%d", scaledSize.first, scaledSize.second);
-  ImGui::Text("Display density: %fx", double(trueSize.first) / scaledSize.first);
+  auto [trueWidth, trueHeight] = window->getTrueSize();
+  ImGui::Text("True resolution: %dx%d", trueWidth, trueHeight);
+  auto [scaledWidth, scaledHeight] = window->getScaledSize();
+  ImGui::Text("Scaled resolution: %dx%d", scaledWidth, scaledHeight);
+  ImGui::Text("Display density: %fx", double(trueWidth) / double(scaledWidth));
+  ImGui::Text("Display scale (SDL): %fx", this->window->getDisplayScale());
   ImGui::End();
 
   ImGui::Begin("Beatmaps");

@@ -57,8 +57,8 @@ void Window::beginDrawing()
 void Window::finishDrawing()
 {
   ImGui::Render();
-  auto dimensions = this->getTrueSize();
-  glViewport(0, 0, dimensions.first, dimensions.second);
+  auto [width, height] = this->getTrueSize();
+  glViewport(0, 0, width, height);
   glClearColor(0, 0, 0, 255);
   glClear(GL_COLOR_BUFFER_BIT);
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -82,4 +82,9 @@ std::pair<int, int> Window::getScaledSize()
   int width, height;
   SDL_GetWindowSize(this->sdlWindow, &width, &height);
   return {width, height};
+}
+
+float Window::getDisplayScale()
+{
+  return SDL_GetWindowDisplayScale(this->sdlWindow);
 }
