@@ -28,7 +28,7 @@ void Game::initBeatmaps(const std::filesystem::path& path)
       this->beatmaps.emplace_back(std::move(beatmap));
     }
 
-  std::println("Finished loading {} beatmaps", i);
+  std::println("Loaded {} beatmaps", i);
 }
 
 void Game::initWindow()
