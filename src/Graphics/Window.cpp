@@ -3,11 +3,9 @@
 #include <glad/glad.h>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
-#include <imgui_impl_sdl3.h>
+#include <imgui_impl_sdl2.h>
 #include <print>
-#include <SDL3/SDL_init.h>
-#include <SDL3/SDL_opengl.h>
-#include <SDL3/SDL_video.h>
+#include <SDL.h>
 
 Window::Window()
 {
@@ -17,7 +15,7 @@ Window::Window()
 
   SDL_GL_LoadLibrary(nullptr);
 
-  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", 0, 0, 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
   if (!this->sdlWindow)
     Util::panic("Failed to create SDL window: {}", SDL_GetError());
 
@@ -32,14 +30,14 @@ Window::Window()
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
 
-  ImGui_ImplSDL3_InitForOpenGL(this->sdlWindow, this->glContext);
+  ImGui_ImplSDL2_InitForOpenGL(this->sdlWindow, this->glContext);
   ImGui_ImplOpenGL3_Init();
 }
 
 Window::~Window()
 {
   ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplSDL3_Shutdown();
+  ImGui_ImplSDL2_Shutdown();
   ImGui::DestroyContext();
 
   SDL_GL_DeleteContext(this->glContext);
@@ -50,7 +48,7 @@ Window::~Window()
 void Window::beginDrawing()
 {
   ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplSDL3_NewFrame();
+  ImGui_ImplSDL2_NewFrame();
   ImGui::NewFrame();
 }
 
@@ -82,14 +80,4 @@ std::pair<int, int> Window::getScaledSize()
   int width, height;
   SDL_GetWindowSize(this->sdlWindow, &width, &height);
   return {width, height};
-}
-
-float Window::getDisplayScale()
-{
-  return SDL_GetWindowDisplayScale(this->sdlWindow);
-}
-
-float Window::getPixelDensity()
-{
-  return SDL_GetWindowPixelDensity(this->sdlWindow);
 }

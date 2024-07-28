@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL3/SDL_video.h>
+#include <SDL_video.h>
 #include <utility>
 
 class Window
@@ -14,9 +14,6 @@ public:
   void setVsync(bool value);
 
   void drawDebugGui();
-
-  float getDisplayScale();
-  float getPixelDensity();
 
   std::pair<int, int> getTrueSize();
   std::pair<int, int> getScaledSize();

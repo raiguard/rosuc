@@ -1,11 +1,10 @@
 #include "Game.hpp"
 #include "Graphics/Window.hpp"
 #include "Util.hpp"
-#include <imgui_impl_sdl3.h>
-#include <imgui_stdlib.h>
+#include <imgui_impl_sdl2.h>
 #include <print>
-#include <SDL3/SDL_events.h>
-#include <SDL3/SDL_render.h>
+#include <SDL_events.h>
+#include <SDL_render.h>
 #include <thread>
 
 void Game::initBeatmaps(const std::filesystem::path& path)
@@ -79,9 +78,9 @@ Game::ShouldQuit Game::handleEvents()
   SDL_Event event;
   while (SDL_PollEvent(&event))
   {
-    if (ImGui_ImplSDL3_ProcessEvent(&event))
+    if (ImGui_ImplSDL2_ProcessEvent(&event))
       continue;
-    if (event.type == SDL_EVENT_QUIT)
+    if (event.type == SDL_QUIT)
       return true;
   }
 
@@ -102,15 +101,13 @@ void Game::drawDebugGui()
   auto [scaledWidth, scaledHeight] = window->getScaledSize();
   ImGui::Text("Scaled resolution: %dx%d", scaledWidth, scaledHeight);
   ImGui::Text("Display density: %fx", double(trueWidth) / double(scaledWidth));
-  ImGui::Text("Display scale (SDL): %fx", this->window->getDisplayScale());
-  ImGui::Text("Pixel density (SDL): %fx", this->window->getPixelDensity());
   ImGui::End();
 
   ImGui::Begin("Beatmaps");
   static std::string searchText;
   ImGui::Text("Search:");
   ImGui::SameLine();
-  ImGui::InputText("##", &searchText);
+  // ImGui::InputText("##", &searchText);
   if (this->activeBeatmap)
     ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
   uint32_t i = 0;
