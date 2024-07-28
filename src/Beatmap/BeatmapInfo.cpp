@@ -4,32 +4,31 @@
 
 void trimString(std::string& s)
 {
-  s.erase(s.begin(), std::ranges::find_if(s.begin(), s.end(), [](char ch) { return !std::isspace(ch); }));
-  s.erase(std::ranges::find_if(s.rbegin(), s.rend(), [](char ch) { return !std::isspace(ch); }).base(),
-          s.end());
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](char ch) { return !std::isspace(ch); }));
+  s.erase(std::find_if(s.rbegin(), s.rend(), [](char ch) { return !std::isspace(ch); }).base(), s.end());
 }
 
 std::pair<std::string, std::string> readKeyValue(const std::string& line)
 {
   size_t delim = line.find(':');
   std::string key = line.substr(0, delim);
+  trimString(key);
   if (line.size() < delim + 1)
     return {key, ""};
-  return {key, line.substr(delim + 1, line.size())};
+  std::string value = line.substr(delim + 1, line.size());
+  trimString(value);
+  return {key, value};
 }
 
 BeatmapInfo::BeatmapInfo(const std::string& data)
 {
-  // OsuReader reader(data);
-
   std::istringstream input(data);
   std::string line;
   std::getline(input, line);
   trimString(line);
-  if (line != "osu file format v14" && line != "osu file format v14\r")
-  {
+  if (line.find("osu file format v14") == line.npos)
+    // TODO: Support older formats
     return;
-  }
 
   bool foundMeta = false;
   while (std::getline(input, line))

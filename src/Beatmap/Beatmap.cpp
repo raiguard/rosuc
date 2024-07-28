@@ -9,7 +9,7 @@ Beatmap::Beatmap(const std::filesystem::path& path)
   ZipReader reader(path);
   reader.setPattern("*.osu");
   if (!reader.gotoFirstEntry())
-    Util::panic("Failed to read entry from beatmap file");
+    Util::panic("Beatmap file contains no difficulties.");
 
   do {
     BeatmapInfo info(reader.readEntry());
