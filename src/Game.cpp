@@ -43,7 +43,7 @@ Game::ShouldQuit Game::frame()
 
   static Clock::time_point lastFrameTime = Clock::now();
   static Clock::duration accumulator;
-  static constexpr std::chrono::nanoseconds timestep(1000000000 / 1000);
+  static constexpr std::chrono::nanoseconds timestep(1000000000 / Game::UPS);
 
   Clock::time_point currentTime = Clock::now();
   Clock::duration frameTime = currentTime - lastFrameTime;
