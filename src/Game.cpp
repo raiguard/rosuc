@@ -96,17 +96,12 @@ void Game::drawDebugGui()
   static bool useVsync = true;
   if (ImGui::Checkbox("Use vsync", &useVsync))
     window->setVsync(useVsync);
-  auto [trueWidth, trueHeight] = window->getTrueSize();
-  ImGui::Text("True resolution: %dx%d", trueWidth, trueHeight);
-  auto [scaledWidth, scaledHeight] = window->getScaledSize();
-  ImGui::Text("Scaled resolution: %dx%d", scaledWidth, scaledHeight);
-  ImGui::Text("Display density: %fx", double(trueWidth) / double(scaledWidth));
   ImGui::End();
 
   ImGui::Begin("Beatmaps");
   static std::string searchText;
-  ImGui::Text("Search:");
-  ImGui::SameLine();
+  // ImGui::Text("Search:");
+  // ImGui::SameLine();
   // ImGui::InputText("##", &searchText);
   if (this->activeBeatmap)
     ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
