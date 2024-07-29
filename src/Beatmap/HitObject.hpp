@@ -1,7 +1,7 @@
 #pragma once
 #include "Beatmap/OsuPixel.hpp"
 #include <cstdint>
-#include <sstream>
+#include <string>
 
 class HitSounds
 {
@@ -28,7 +28,7 @@ enum class HitObjectType
 class HitObject
 {
 public:
-  HitObject(std::istringstream& input);
+  HitObject(const std::string& input);
 
   OsuPixel getPos() const { return this->pos; }
   uint32_t getTimestamp() const { return this->timestamp; }

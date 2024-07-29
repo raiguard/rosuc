@@ -8,6 +8,13 @@ void trimString(std::string& s)
   s.erase(std::find_if(s.rbegin(), s.rend(), [](char ch) { return !std::isspace(ch); }).base(), s.end());
 }
 
+std::istream& getLine(std::istream& input, std::string& buf, char delim = '\n')
+{
+  std::istream& res = std::getline(input, buf, delim);
+  trimString(buf);
+  return res;
+}
+
 std::pair<std::string, std::string> readKeyValue(const std::string& line)
 {
   size_t delim = line.find(':');
@@ -24,68 +31,49 @@ BeatmapInfo::BeatmapInfo(const std::string& data)
 {
   std::istringstream input(data);
   std::string line;
-  std::getline(input, line);
-  trimString(line);
+  getLine(input, line);
   if (line.find("osu file format v14") == line.npos)
     // TODO: Support older formats
     return;
 
-  bool foundMeta = false;
-  while (std::getline(input, line))
+  std::string section;
+  while (getLine(input, line))
   {
-    trimString(line);
-    if (line == "[Metadata]")
-    {
-      foundMeta = true;
-      break;
-    }
-  }
-  while (std::getline(input, line))
-  {
-    trimString(line);
     if (line.empty())
       continue;
-    if (line[0] == '[')
-      break;
-    auto [key, value] = readKeyValue(line);
-    if (key == "Title")
-      this->title = value;
-    else if (key == "TitleUnicode")
-      this->titleUnicode = value;
-    else if (key == "Artist")
-      this->artist = value;
-    else if (key == "ArtistUnicode")
-      this->artistUnicode = value;
-    else if (key == "Creator")
-      this->creator = value;
-    else if (key == "Version")
-      this->version = value;
-    else if (key == "Source")
-      this->source = value;
-    else if (key == "Tags")
-      this->tags = value;
-    else if (key == "BeatmapID")
-      this->beatmapID = value;
-    else if (key == "BeatmapSetID")
-      this->beatmapSetID = value;
-    else
-      Util::panic("Invalid key in beatmap metadata: {}", key);
-  }
-  if (!foundMeta)
-    Util::panic("Invalid beatmap file - could not find metadata");
-
-  bool foundHitObjects = false;
-  while (std::getline(input, line))
-  {
-    trimString(line);
-    if (line == "[HitObjects]")
+    if (line[0] == '[' && line[line.size() - 1] == ']')
     {
-      foundHitObjects = true;
-      break;
+      section = line.substr(1, line.size() - 2);
+      continue;
     }
+
+    if (section == "Metadata")
+    {
+      auto [key, value] = readKeyValue(line);
+      if (key == "Title")
+        this->title = value;
+      else if (key == "TitleUnicode")
+        this->titleUnicode = value;
+      else if (key == "Artist")
+        this->artist = value;
+      else if (key == "ArtistUnicode")
+        this->artistUnicode = value;
+      else if (key == "Creator")
+        this->creator = value;
+      else if (key == "Version")
+        this->version = value;
+      else if (key == "Source")
+        this->source = value;
+      else if (key == "Tags")
+        this->tags = value;
+      else if (key == "BeatmapID")
+        this->beatmapID = value;
+      else if (key == "BeatmapSetID")
+        this->beatmapSetID = value;
+      else
+        Util::panic("Invalid key in beatmap metadata: {}", key);
+    }
+    else if (section == "HitObjects")
+      this->hitObjects.emplace_back(line);
   }
-  if (!foundHitObjects)
-    Util::panic("Invalid beatmap file - could not find hit objects");
-  while (input && !input.eof() && input.peek() != -1 && input.peek() != 0 && input.peek() != '\r' && input.peek() != '\n')
-    this->hitObjects.emplace_back(input);
 }

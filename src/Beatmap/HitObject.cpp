@@ -12,11 +12,9 @@ T readNumber(std::istringstream& stream)
   return val;
 }
 
-HitObject::HitObject(std::istringstream& input)
-  : pos({readNumber<uint16_t>(input), readNumber<uint16_t>(input)})
-  , timestamp(readNumber<uint32_t>(input))
+HitObject::HitObject(const std::string& input)
 {
-  // TODO: Actually read all of the info
-  std::string garbage;
-  std::getline(input, garbage);
+  std::istringstream stream(input);
+  this->pos = {readNumber<uint16_t>(stream), readNumber<uint16_t>(stream)};
+  this->timestamp = readNumber<uint32_t>(stream);
 }
