@@ -18,6 +18,8 @@ std::istream& getLine(std::istream& input, std::string& buf, char delim = '\n')
 std::pair<std::string, std::string> readKeyValue(const std::string& line)
 {
   size_t delim = line.find(':');
+  if (delim == line.npos)
+    Util::panic("Invalid key:value pair");
   std::string key = line.substr(0, delim);
   trimString(key);
   if (line.size() < delim + 1)
@@ -39,7 +41,7 @@ BeatmapInfo::BeatmapInfo(const std::string& data)
   std::string section;
   while (getLine(input, line))
   {
-    if (line.empty())
+    if (line.empty() || line.rfind("//", 0) != line.npos)
       continue;
     if (line[0] == '[' && line[line.size() - 1] == ']')
     {
