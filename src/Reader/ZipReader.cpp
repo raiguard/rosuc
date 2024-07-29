@@ -58,5 +58,5 @@ std::string ZipReader::readEntry()
   if (bytes_read < buf.size())
     Util::panic("Didn't read whole zip entry: expected {}, got {}", buf.size(), bytes_read);
   mz_zip_reader_entry_close(this->zip_reader);
-  return std::string(buf.data());
+  return std::string(buf.begin(), buf.end());
 }

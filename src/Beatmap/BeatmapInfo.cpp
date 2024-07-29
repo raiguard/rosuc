@@ -73,4 +73,19 @@ BeatmapInfo::BeatmapInfo(const std::string& data)
   }
   if (!foundMeta)
     Util::panic("Invalid beatmap file - could not find metadata");
+
+  bool foundHitObjects = false;
+  while (std::getline(input, line))
+  {
+    trimString(line);
+    if (line == "[HitObjects]")
+    {
+      foundHitObjects = true;
+      break;
+    }
+  }
+  if (!foundHitObjects)
+    Util::panic("Invalid beatmap file - could not find hit objects");
+  while (input && !input.eof() && input.peek() != -1 && input.peek() != 0 && input.peek() != '\r' && input.peek() != '\n')
+    this->hitObjects.emplace_back(input);
 }

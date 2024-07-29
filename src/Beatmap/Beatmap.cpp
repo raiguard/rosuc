@@ -2,10 +2,12 @@
 #include "Reader/ZipReader.hpp"
 #include "Util.hpp"
 #include <cassert>
+#include <print>
 
 Beatmap::Beatmap(const std::filesystem::path& path)
   : path(path)
 {
+  std::println("Reading beatmap {}", path.c_str());
   ZipReader reader(path);
   reader.setPattern("*.osu");
   if (!reader.gotoFirstEntry())

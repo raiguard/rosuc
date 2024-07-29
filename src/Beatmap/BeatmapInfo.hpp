@@ -1,5 +1,7 @@
 #pragma once
+#include "Beatmap/HitObject.hpp"
 #include <string>
+#include <vector>
 
 class BeatmapInfo
 {
@@ -21,4 +23,6 @@ public:
   std::string tags;
   std::string beatmapID;
   std::string beatmapSetID;
+
+  std::vector<HitObject> hitObjects;
 };
