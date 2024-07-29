@@ -1,7 +1,9 @@
 #pragma once
 #include "Beatmap/OsuPixel.hpp"
+#include <cassert>
 #include <cstdint>
 #include <string>
+#include <vector>
 
 class HitSounds
 {
@@ -14,7 +16,7 @@ public:
   bool isFinish() const { return this->value & (1 << 1); }
   bool isClap() const { return this->value & (1 << 2); }
 private:
-  uint8_t value;
+  uint8_t value = 0;
 };
 
 enum class HitObjectType
@@ -22,7 +24,15 @@ enum class HitObjectType
   HitCircle,
   Slider,
   Spinner,
-  ManiaHoldNote, // TODO: Figure out how to reject beatmap if it's not osu!standard
+  ManiaHoldNote,
+};
+
+enum class CurveType
+{
+  Bezier,
+  Cetripedal,
+  Linear,
+  PerfectCircle,
 };
 
 class HitObject
@@ -38,9 +48,24 @@ public:
   uint8_t getComboSkip() const { return (this->flags & (7 << 4)) >> 4; }
 
   HitSounds getHitSounds() const { return this->hitSounds; }
+
+  CurveType getCurveType() const { assert(this->getType() == HitObjectType::Slider); return this->curveType; }
+  const std::vector<OsuPixel>& getCurvePoints() const { assert(this->getType() == HitObjectType::Slider); return this->curvePoints; }
 private:
+  void readSliderData(std::istream& input);
+
+  // Common
   OsuPixel pos;
-  uint32_t timestamp;
-  uint8_t flags;
+  uint32_t timestamp = 0;
+  uint8_t flags = 0;
   HitSounds hitSounds;
+
+  // Slider
+  CurveType curveType;
+  std::vector<OsuPixel> curvePoints;
+  uint8_t slides = 0;
+  float length = 0;
+
+  // Spinner
+  uint32_t endTime = 0;
 };

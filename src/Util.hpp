@@ -5,6 +5,7 @@
 namespace Util
 {
   template <typename... T>
+  [[noreturn]]
   inline void panic(std::format_string<T...> format, T&&... args)
   {
     throw std::runtime_error(std::format(format, std::forward<T>(args)...));
