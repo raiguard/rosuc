@@ -1,10 +1,10 @@
 # rosuc
 
-**R**ai's **osu**!standard **c**lone. A small game written in C++ with SDL3.
+**R**ai's **osu**!standard **c**lone. A small game written in C++ with SDL2.
 
 ## Compiling
 
-Uses the `meson` build system. The project has dependencies on `SDL3` and `minizip-ng`.
+Uses the `meson` build system.
 
 ```
 make setup
