@@ -53,8 +53,7 @@ std::string ZipReader::readEntry()
 
   std::vector<char> buf;
   buf.resize(this->entryInfo->uncompressed_size);
-  uint32_t bytes_read = 0;
-  bytes_read = mz_zip_reader_entry_read(this->zip_reader, buf.data(), buf.size());
+  uint32_t bytes_read = mz_zip_reader_entry_read(this->zip_reader, buf.data(), buf.size());
   if (bytes_read < buf.size())
     Util::panic("Didn't read whole zip entry: expected {}, got {}", buf.size(), bytes_read);
   mz_zip_reader_entry_close(this->zip_reader);
