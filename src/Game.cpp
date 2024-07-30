@@ -2,6 +2,7 @@
 #include "Graphics/Window.hpp"
 #include "Util.hpp"
 #include <imgui_impl_sdl2.h>
+#include <imgui_stdlib.h>
 #include <print>
 #include <SDL_events.h>
 #include <SDL_render.h>
@@ -107,11 +108,12 @@ void Game::drawDebugGui()
 
   ImGui::Begin("Beatmaps");
   static std::string searchText;
-  // ImGui::Text("Search:");
-  // ImGui::SameLine();
-  // ImGui::InputText("##", &searchText);
+  ImGui::Text("Search:");
+  ImGui::SameLine();
+  ImGui::InputText("##", &searchText);
   if (this->activeBeatmap)
     ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
+  ImGui::BeginChild("##");
   uint32_t i = 0;
   for (const Beatmap& beatmap : this->beatmaps)
     for (const BeatmapInfo& difficulty : beatmap.getDifficulties())
@@ -124,5 +126,8 @@ void Game::drawDebugGui()
         // TODO: Figure out why taking a pointer here results in garbage.
         this->activeBeatmap = difficulty;
     }
+  ImGui::EndChild();
   ImGui::End();
+
+  ImGui::ShowDemoWindow();
 }
