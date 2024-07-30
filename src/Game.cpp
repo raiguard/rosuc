@@ -30,6 +30,11 @@ void Game::initBeatmaps(const std::filesystem::path& path)
     }
 
   std::println("Loaded {} beatmaps", i);
+
+  std::sort(this->beatmaps.begin(), this->beatmaps.end(), [](const Beatmap& a, const Beatmap& b)
+  {
+    return a.getDifficulties()[0].title < b.getDifficulties()[0].title;
+  });
 }
 
 void Game::initWindow()
