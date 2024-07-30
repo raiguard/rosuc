@@ -23,6 +23,8 @@ void Game::initBeatmaps(const std::filesystem::path& path)
     if (entry.is_regular_file() && entry.path().extension() == ".osz")
     {
       Beatmap beatmap(entry.path());
+      if (beatmap.getDifficulties().empty())
+        continue;
       i += beatmap.getDifficulties().size();
       this->beatmaps.emplace_back(std::move(beatmap));
     }

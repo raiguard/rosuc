@@ -34,8 +34,6 @@ HitObject::HitObject(const std::string& data)
   case HitObjectType::Spinner:
     this->endTime = readNumber<uint32_t>(input);
     break;
-  case HitObjectType::ManiaHoldNote:
-    break;
   }
 }
 
@@ -92,8 +90,6 @@ HitObjectType HitObject::getType() const
     return HitObjectType::Slider;
   case 0b1000:
     return HitObjectType::Spinner;
-  case 0b10000000:
-    return HitObjectType::ManiaHoldNote; // TODO: Reject non-standard beatmaps
   default:
     Util::panic("Invalid hit object type {}", masked);
   }

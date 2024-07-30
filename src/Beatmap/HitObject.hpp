@@ -24,7 +24,6 @@ enum class HitObjectType
   HitCircle,
   Slider,
   Spinner,
-  ManiaHoldNote,
 };
 
 enum class CurveType

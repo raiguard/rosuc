@@ -77,5 +77,14 @@ BeatmapInfo::BeatmapInfo(const std::string& data)
     }
     else if (section == "HitObjects")
       this->hitObjects.emplace_back(line);
+    else if (section == "General")
+    {
+      auto [key, value] = readKeyValue(line);
+      if (key == "Mode" && value != "0")
+      {
+        this->title = "";
+        return;
+      }
+    }
   }
 }
