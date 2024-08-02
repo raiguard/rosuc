@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Audio/AudioManager.hpp"
 #include "Beatmap/Beatmap.hpp"
 #include "Graphics/Window.hpp"
 #include <filesystem>
@@ -12,7 +12,7 @@ public:
   using ShouldQuit = bool;
 
   void initBeatmaps(const std::filesystem::path& path);
-  void initWindow();
+  void init();
   ShouldQuit frame();
 
 
@@ -22,6 +22,7 @@ private:
 
   std::vector<Beatmap> beatmaps;
   std::unique_ptr<Window> window;
+  std::unique_ptr<AudioManager> audioManager;
 
   static constexpr uint32_t UPS = 1000;
 

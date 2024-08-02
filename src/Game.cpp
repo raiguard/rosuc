@@ -38,9 +38,10 @@ void Game::initBeatmaps(const std::filesystem::path& path)
   });
 }
 
-void Game::initWindow()
+void Game::init()
 {
   this->window.reset(new Window());
+  this->audioManager.reset(new AudioManager());
 }
 
 Game::ShouldQuit Game::frame()
@@ -65,6 +66,8 @@ Game::ShouldQuit Game::frame()
   while (accumulator >= timestep)
   {
     // TODO: Update game state
+    if (!this->audioManager->playingSong())
+      this->audioManager->playSong("song.ogg");
     accumulator -= timestep;
   }
 

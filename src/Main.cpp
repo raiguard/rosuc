@@ -4,7 +4,7 @@ int main()
 {
   Game game;
   game.initBeatmaps("beatmaps");
-  game.initWindow();
+  game.init();
 
   while (!game.frame());
 }
