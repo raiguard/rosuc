@@ -24,5 +24,5 @@ public:
   std::string beatmapID;
   std::string beatmapSetID;
 
-  std::vector<HitObject> hitObjects;
+  // std::vector<HitObject> hitObjects;
 };

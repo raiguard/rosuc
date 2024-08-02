@@ -75,8 +75,8 @@ BeatmapInfo::BeatmapInfo(const std::string& data)
       else
         Util::panic("Invalid key in beatmap metadata: {}", key);
     }
-    else if (section == "HitObjects")
-      this->hitObjects.emplace_back(line);
+    // else if (section == "HitObjects")
+    //   this->hitObjects.emplace_back(line);
     else if (section == "General")
     {
       auto [key, value] = readKeyValue(line);
