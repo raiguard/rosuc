@@ -1,12 +1,13 @@
 #include "Game.hpp"
 #include "Graphics/Window.hpp"
-#include "Util.hpp"
 #include <imgui_impl_sdl2.h>
 #include <imgui_stdlib.h>
 #include <print>
+#include <SDL_audio.h>
 #include <SDL_events.h>
 #include <SDL_render.h>
 #include <thread>
+#include "Util.hpp"
 
 void Game::initBeatmaps(const std::filesystem::path& path)
 {
@@ -107,6 +108,8 @@ void Game::drawDebugGui()
   static bool useVsync = true;
   if (ImGui::Checkbox("Use vsync", &useVsync))
     window->setVsync(useVsync);
+  ImGui::Separator();
+  ImGui::Text("Audio driver: %s", SDL_GetCurrentAudioDriver());
   ImGui::End();
 
   ImGui::Begin("Beatmaps");
