@@ -75,8 +75,6 @@ BeatmapMetadata::BeatmapMetadata(const std::filesystem::path& path)
       else
         Util::panic("Invalid key in beatmap metadata: {}", key);
     }
-    // else if (section == "HitObjects")
-    //   this->hitObjects.emplace_back(line);
     else if (section == "General")
     {
       auto [key, value] = readKeyValue(line);
