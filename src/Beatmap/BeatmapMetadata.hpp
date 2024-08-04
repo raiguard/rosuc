@@ -1,10 +1,11 @@
 #pragma once
+#include <filesystem>
 #include <string>
 
 class BeatmapMetadata
 {
 public:
-  BeatmapMetadata(const std::string& data);
+  BeatmapMetadata(const std::filesystem::path& path);
 
   bool isValid()
   {
@@ -22,6 +23,7 @@ public:
   std::string beatmapID;
   std::string beatmapSetID;
 
-  std::string audioFilename;
+  std::filesystem::path path;
+  std::filesystem::path audio;
   int32_t previewTime = -1;
 };

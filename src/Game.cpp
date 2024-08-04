@@ -67,8 +67,6 @@ Game::ShouldQuit Game::frame()
   while (accumulator >= timestep)
   {
     // TODO: Update game state
-    if (!this->audioManager->playingSong())
-      this->audioManager->playSong("song.mp3");
     accumulator -= timestep;
   }
 
@@ -129,7 +127,10 @@ void Game::drawDebugGui()
         continue;
 
       if (ImGui::Button(std::format("{} ({})##{}", difficulty.title.c_str(), difficulty.version.c_str(), i).c_str()))
+      {
         this->activeBeatmap = std::make_unique<ActiveBeatmapInfo>(difficulty);
+        this->audioManager->playSong(this->activeBeatmap->getInfo().audio, this->activeBeatmap->getInfo().previewTime);
+      }
     }
   ImGui::EndChild();
   ImGui::End();

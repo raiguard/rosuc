@@ -9,7 +9,7 @@ public:
   AudioManager();
   ~AudioManager();
 
-  void playSong(const std::filesystem::path& path);
+  void playSong(const std::filesystem::path& path, int32_t offset = -1);
   bool playingSong() const { return bool(this->music); }
 
 private:

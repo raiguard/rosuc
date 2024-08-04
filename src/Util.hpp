@@ -12,4 +12,6 @@ namespace Util
   }
 
   std::string readFile(const std::filesystem::path& path);
+  void trimString(std::string& s);
+  bool iequals(std::string_view lhs, std::string_view rhs);
 }
