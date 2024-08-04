@@ -30,3 +30,17 @@ bool Util::iequals(std::string_view lhs, std::string_view rhs)
 {
   return std::ranges::equal(lhs, rhs, ichar_equals);
 }
+
+// Creates a copy of `str` with all characters converted to lowercase.
+std::string Util::toLower(std::string_view str)
+{
+  std::string out;
+  out.resize(str.size());
+  std::transform(str.begin(), str.end(), out.begin(), [](char c){ return std::tolower(c); });
+  return out;
+}
+
+bool Util::icontains(std::string_view str, std::string_view search)
+{
+  return Util::toLower(str).contains(Util::toLower(search));
+}

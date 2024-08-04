@@ -123,7 +123,7 @@ void Game::drawDebugGui()
     for (const BeatmapMetadata& difficulty : beatmap.getDifficulties())
     {
       i++;
-      if (!searchText.empty() && !difficulty.title.contains(searchText))
+      if (!searchText.empty() && !Util::icontains(difficulty.title, searchText))
         continue;
 
       if (ImGui::Button(std::format("{} ({})##{}", difficulty.title.c_str(), difficulty.version.c_str(), i).c_str()))
