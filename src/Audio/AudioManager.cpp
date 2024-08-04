@@ -25,7 +25,7 @@ void AudioManager::update()
     this->play();
 }
 
-void AudioManager::playSong(const std::filesystem::path& path, int32_t offset, bool repeat)
+void AudioManager::playSong(const std::filesystem::path& path, int32_t offset, Repeat repeat)
 {
   if (this->music)
     Mix_FreeMusic(this->music);

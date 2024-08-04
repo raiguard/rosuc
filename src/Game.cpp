@@ -62,11 +62,11 @@ Game::ShouldQuit Game::frame()
 
   // TODO: Handle input or rendering on a separate thread to make input precision FPS-agnostic
   if (this->handleEvents())
-    return true;
+    return ShouldQuit::True;
 
   while (accumulator >= timestep)
   {
-    this->audioManager->update();
+    this->update();
     accumulator -= timestep;
   }
 
@@ -80,7 +80,7 @@ Game::ShouldQuit Game::frame()
   if (timeToSleep > Clock::duration::zero())
     std::this_thread::sleep_for(timeToSleep);
 
-  return false;
+  return ShouldQuit::False;
 }
 
 Game::ShouldQuit Game::handleEvents()
@@ -91,10 +91,16 @@ Game::ShouldQuit Game::handleEvents()
     if (ImGui_ImplSDL2_ProcessEvent(&event))
       continue;
     if (event.type == SDL_QUIT)
-      return true;
+      return ShouldQuit::True;
   }
 
-  return false;
+  return ShouldQuit::False;
+}
+
+Game::ShouldQuit Game::update()
+{
+  this->audioManager->update();
+  return ShouldQuit::False;
 }
 
 void Game::drawDebugGui()
@@ -129,7 +135,7 @@ void Game::drawDebugGui()
       if (ImGui::Button(std::format("{} ({})##{}", difficulty.title.c_str(), difficulty.version.c_str(), i).c_str()))
       {
         this->activeBeatmap = std::make_unique<ActiveBeatmapInfo>(difficulty);
-        this->audioManager->playSong(this->activeBeatmap->getInfo().audio, this->activeBeatmap->getInfo().previewTime, true);
+        this->audioManager->playSong(this->activeBeatmap->getInfo().audio, this->activeBeatmap->getInfo().previewTime, AudioManager::Repeat::True);
       }
     }
   ImGui::EndChild();

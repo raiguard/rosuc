@@ -3,6 +3,7 @@
 #include "Beatmap/ActiveBeatmapInfo.hpp"
 #include "Beatmap/Beatmap.hpp"
 #include "Graphics/Window.hpp"
+#include "NamedBool.hpp"
 #include <filesystem>
 #include <memory>
 #include <vector>
@@ -10,14 +11,16 @@
 class Game
 {
 public:
-  using ShouldQuit = bool;
+  using ShouldQuit = NamedBool<class ShouldQuitTag>;
 
   void initBeatmaps(const std::filesystem::path& path);
   void init();
   ShouldQuit frame();
 
+
 private:
   ShouldQuit handleEvents();
+  ShouldQuit update();
   void drawDebugGui();
 
   std::vector<Beatmap> beatmaps;
