@@ -1,4 +1,4 @@
-#include "Beatmap/BeatmapMetadata.hpp"
+#include "Beatmap/Beatmap.hpp"
 #include "Reader/OsuReader.hpp"
 #include "Util.hpp"
 #include <fstream>
@@ -25,7 +25,7 @@ std::pair<std::string, std::string> readKeyValue(const std::string& line)
   return {key, value};
 }
 
-BeatmapMetadata::BeatmapMetadata(const std::filesystem::path& path)
+Beatmap::Beatmap(const std::filesystem::path& path)
   : path(path)
 {
   std::ifstream file(path);

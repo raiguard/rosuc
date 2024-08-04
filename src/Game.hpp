@@ -17,7 +17,6 @@ public:
   void init();
   ShouldQuit frame();
 
-
 private:
   ShouldQuit handleEvents();
   ShouldQuit update();

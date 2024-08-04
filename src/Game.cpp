@@ -126,7 +126,7 @@ void Game::drawDebugGui()
   ImGui::BeginChild("##");
   uint32_t i = 0;
   for (const BeatmapSet& beatmapSet : this->beatmaps)
-    for (const BeatmapMetadata& beatmap : beatmapSet.getDifficulties())
+    for (const Beatmap& beatmap : beatmapSet.getDifficulties())
     {
       i++;
       if (!searchText.empty() && !Util::icontains(beatmap.title, searchText))

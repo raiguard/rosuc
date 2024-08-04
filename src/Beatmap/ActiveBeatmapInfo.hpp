@@ -1,15 +1,15 @@
 #pragma once
-#include "Beatmap/BeatmapMetadata.hpp"
+#include "Beatmap/Beatmap.hpp"
 
-class BeatmapMetadata;
+class Beatmap;
 
 class ActiveBeatmapInfo
 {
 public:
-  ActiveBeatmapInfo(const BeatmapMetadata& metadata);
+  ActiveBeatmapInfo(const Beatmap& metadata);
 
-  const BeatmapMetadata& getInfo() const { return this->metadata; }
+  const Beatmap& getInfo() const { return this->metadata; }
 
 private:
-  const BeatmapMetadata metadata;
+  const Beatmap metadata;
 };

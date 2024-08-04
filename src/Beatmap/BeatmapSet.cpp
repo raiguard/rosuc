@@ -9,7 +9,7 @@ BeatmapSet::BeatmapSet(const std::filesystem::path& path)
   for (const auto& entry : std::filesystem::directory_iterator(path))
     if (entry.is_regular_file() && entry.path().extension() == ".osu")
     {
-      BeatmapMetadata meta(entry.path());
+      Beatmap meta(entry.path());
       if (meta.isValid())
         this->difficulties.emplace_back(std::move(meta));
     }

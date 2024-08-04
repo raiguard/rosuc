@@ -1,5 +1,5 @@
 #include <Beatmap/ActiveBeatmapInfo.hpp>
 
-ActiveBeatmapInfo::ActiveBeatmapInfo(const BeatmapMetadata& metadata)
+ActiveBeatmapInfo::ActiveBeatmapInfo(const Beatmap& metadata)
   : metadata(metadata)
 {}

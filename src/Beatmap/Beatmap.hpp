@@ -2,15 +2,12 @@
 #include <filesystem>
 #include <string>
 
-class BeatmapMetadata
+class Beatmap
 {
 public:
-  BeatmapMetadata(const std::filesystem::path& path);
+  Beatmap(const std::filesystem::path& path);
 
-  bool isValid()
-  {
-    return !title.empty();
-  }
+  bool isValid() { return !title.empty(); }
 
   std::string title;
   std::string titleUnicode;
