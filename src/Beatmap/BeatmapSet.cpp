@@ -1,8 +1,8 @@
-#include "Beatmap.hpp"
+#include "Beatmap/BeatmapSet.hpp"
 #include <cassert>
 #include <print>
 
-Beatmap::Beatmap(const std::filesystem::path& path)
+BeatmapSet::BeatmapSet(const std::filesystem::path& path)
   : path(path)
 {
   std::println("Reading beatmap {}", path.c_str());

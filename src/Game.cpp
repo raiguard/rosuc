@@ -24,7 +24,7 @@ void Game::initBeatmaps(const std::filesystem::path& path)
   for (const auto& entry : std::filesystem::directory_iterator(path))
     if (entry.is_directory())
     {
-      Beatmap beatmap(entry.path());
+      BeatmapSet beatmap(entry.path());
       if (beatmap.getDifficulties().empty())
         continue;
       i += beatmap.getDifficulties().size();
@@ -33,7 +33,7 @@ void Game::initBeatmaps(const std::filesystem::path& path)
 
   std::println("Loaded {} beatmaps", i);
 
-  std::sort(this->beatmaps.begin(), this->beatmaps.end(), [](const Beatmap& a, const Beatmap& b)
+  std::sort(this->beatmaps.begin(), this->beatmaps.end(), [](const BeatmapSet& a, const BeatmapSet& b)
   {
     return a.getDifficulties()[0].title < b.getDifficulties()[0].title;
   });
@@ -125,16 +125,16 @@ void Game::drawDebugGui()
     ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->getInfo().title.c_str(), this->activeBeatmap->getInfo().version.c_str());
   ImGui::BeginChild("##");
   uint32_t i = 0;
-  for (const Beatmap& beatmap : this->beatmaps)
-    for (const BeatmapMetadata& difficulty : beatmap.getDifficulties())
+  for (const BeatmapSet& beatmapSet : this->beatmaps)
+    for (const BeatmapMetadata& beatmap : beatmapSet.getDifficulties())
     {
       i++;
-      if (!searchText.empty() && !Util::icontains(difficulty.title, searchText))
+      if (!searchText.empty() && !Util::icontains(beatmap.title, searchText))
         continue;
 
-      if (ImGui::Button(std::format("{} ({})##{}", difficulty.title.c_str(), difficulty.version.c_str(), i).c_str()))
+      if (ImGui::Button(std::format("{} ({})##{}", beatmap.title.c_str(), beatmap.version.c_str(), i).c_str()))
       {
-        this->activeBeatmap = std::make_unique<ActiveBeatmapInfo>(difficulty);
+        this->activeBeatmap = std::make_unique<ActiveBeatmapInfo>(beatmap);
         this->audioManager->playSong(this->activeBeatmap->getInfo().audio, this->activeBeatmap->getInfo().previewTime, AudioManager::Repeat::True);
       }
     }

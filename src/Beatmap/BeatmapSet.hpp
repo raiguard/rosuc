@@ -3,10 +3,10 @@
 #include <filesystem>
 #include <vector>
 
-class Beatmap
+class BeatmapSet
 {
 public:
-  Beatmap(const std::filesystem::path& path);
+  BeatmapSet(const std::filesystem::path& path);
 
   const std::vector<BeatmapMetadata>& getDifficulties() const { return this->difficulties; }
 

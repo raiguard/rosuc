@@ -1,7 +1,7 @@
 #pragma once
 #include "Audio/AudioManager.hpp"
 #include "Beatmap/ActiveBeatmapInfo.hpp"
-#include "Beatmap/Beatmap.hpp"
+#include "Beatmap/BeatmapSet.hpp"
 #include "Graphics/Window.hpp"
 #include "NamedBool.hpp"
 #include <filesystem>
@@ -23,7 +23,7 @@ private:
   ShouldQuit update();
   void drawDebugGui();
 
-  std::vector<Beatmap> beatmaps;
+  std::vector<BeatmapSet> beatmaps;
   std::unique_ptr<Window> window;
   std::unique_ptr<AudioManager> audioManager;
   std::unique_ptr<ActiveBeatmapInfo> activeBeatmap;
