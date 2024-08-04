@@ -8,7 +8,7 @@ class BeatmapSet
 public:
   BeatmapSet(const std::filesystem::path& path);
 
-  const std::vector<Beatmap>& getDifficulties() const { return this->difficulties; }
+  const std::vector<Beatmap>& getBeatmaps() const { return this->difficulties; }
 
 private:
   std::filesystem::path path;

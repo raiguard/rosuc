@@ -18,15 +18,15 @@ void BeatmapManager::loadDirectory(const std::filesystem::path& path)
     if (entry.is_directory())
     {
       BeatmapSet set(entry.path());
-      if (set.getDifficulties().empty())
+      if (set.getBeatmaps().empty())
         continue;
-      i += set.getDifficulties().size();
+      i += set.getBeatmaps().size();
       this->sets.emplace_back(std::move(set));
     }
 
   std::sort(this->sets.begin(), this->sets.end(), [](const BeatmapSet& a, const BeatmapSet& b)
   {
-    return a.getDifficulties()[0].title < b.getDifficulties()[0].title;
+    return a.getBeatmaps()[0].title < b.getBeatmaps()[0].title;
   });
 
   std::println("Loaded {} beatmaps", i);
