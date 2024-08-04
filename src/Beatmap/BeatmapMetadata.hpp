@@ -21,4 +21,7 @@ public:
   std::string tags;
   std::string beatmapID;
   std::string beatmapSetID;
+
+  std::string audioFilename;
+  int32_t previewTime = -1;
 };

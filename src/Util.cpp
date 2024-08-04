@@ -9,7 +9,7 @@ std::string Util::readFile(const std::filesystem::path& path)
   if (file.fail())
     Util::panic("Failed to open file: {}", strerror(errno));
 
-  std::string content;
-  file >> content;
-  return content;
+  std::stringstream content;
+  content << file.rdbuf();
+  return content.str();
 }

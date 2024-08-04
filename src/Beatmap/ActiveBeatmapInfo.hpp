@@ -6,7 +6,7 @@ class BeatmapMetadata;
 class ActiveBeatmapInfo
 {
 public:
-  ActiveBeatmapInfo(const BeatmapMetadata& metadata) : metadata(metadata) {}
+  ActiveBeatmapInfo(const BeatmapMetadata& metadata);
 
   const BeatmapMetadata& getInfo() const { return this->metadata; }
 

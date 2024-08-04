@@ -22,7 +22,7 @@ void Game::initBeatmaps(const std::filesystem::path& path)
 
   uint32_t i = 0;
   for (const auto& entry : std::filesystem::directory_iterator(path))
-    if (entry.is_regular_file() && entry.path().extension() == ".osz")
+    if (entry.is_directory())
     {
       Beatmap beatmap(entry.path());
       if (beatmap.getDifficulties().empty())

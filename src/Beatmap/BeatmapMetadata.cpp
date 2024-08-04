@@ -1,4 +1,5 @@
 #include "Beatmap/BeatmapMetadata.hpp"
+#include "Reader/OsuReader.hpp"
 #include "Util.hpp"
 #include <sstream>
 
@@ -84,6 +85,13 @@ BeatmapMetadata::BeatmapMetadata(const std::string& data)
       {
         this->title = "";
         return;
+      }
+      else if (key == "AudioFIlename")
+        this->audioFilename = value;
+      else if (key == "PreviewTime")
+      {
+        std::istringstream stream(value);
+        this->previewTime = OsuReaders::readNumber<int32_t>(stream);
       }
     }
   }

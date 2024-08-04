@@ -1,28 +1,16 @@
 #include "Beatmap/HitObject.hpp"
+#include "Reader/OsuReader.hpp"
 #include "Util.hpp"
 #include <cassert>
 #include <sstream>
 
-template <typename T>
-T readNumber(std::istream& input, char delimiter = 0)
-{
-  T val;
-  input >> val;
-  if (delimiter)
-  {
-    assert(input.peek() == delimiter);
-    input.ignore(1);
-  }
-  return val;
-}
-
 HitObject::HitObject(const std::string& data)
 {
   std::istringstream input(data);
-  this->pos = {readNumber<uint16_t>(input, ','), readNumber<uint16_t>(input, ',')};
-  this->timestamp = readNumber<uint32_t>(input, ',');
-  this->flags = readNumber<uint16_t>(input, ',');
-  this->hitSounds = readNumber<uint16_t>(input);
+  this->pos = {OsuReaders::readNumber<uint16_t>(input, ','), OsuReaders::readNumber<uint16_t>(input, ',')};
+  this->timestamp = OsuReaders::readNumber<uint32_t>(input, ',');
+  this->flags = OsuReaders::readNumber<uint16_t>(input, ',');
+  this->hitSounds = OsuReaders::readNumber<uint16_t>(input);
 
   switch (this->getType())
   {
@@ -32,7 +20,7 @@ HitObject::HitObject(const std::string& data)
     this->readSliderData(input);
     break;
   case HitObjectType::Spinner:
-    this->endTime = readNumber<uint32_t>(input);
+    this->endTime = OsuReaders::readNumber<uint32_t>(input);
     break;
   }
 }
@@ -67,16 +55,16 @@ void HitObject::readSliderData(std::istream& input)
   while (input.peek() == '|')
   {
     input.ignore(1);
-    auto x = readNumber<uint16_t>(input, ':');
-    auto y = readNumber<uint16_t>(input);
+    auto x = OsuReaders::readNumber<uint16_t>(input, ':');
+    auto y = OsuReaders::readNumber<uint16_t>(input);
     this->curvePoints.emplace_back(x, y);
   }
 
   assert(input.peek() == ',');
   input.ignore(1);
 
-  this->slides = readNumber<uint16_t>(input, ',');
-  this->length = readNumber<float>(input);
+  this->slides = OsuReaders::readNumber<uint16_t>(input, ',');
+  this->length = OsuReaders::readNumber<float>(input);
 }
 
 HitObjectType HitObject::getType() const
