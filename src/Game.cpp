@@ -68,7 +68,7 @@ Game::ShouldQuit Game::frame()
   {
     // TODO: Update game state
     if (!this->audioManager->playingSong())
-      this->audioManager->playSong("song.ogg");
+      this->audioManager->playSong("song.mp3");
     accumulator -= timestep;
   }
 
@@ -118,19 +118,18 @@ void Game::drawDebugGui()
   ImGui::SameLine();
   ImGui::InputText("##", &searchText);
   if (this->activeBeatmap)
-    ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->title.c_str(), this->activeBeatmap->version.c_str());
+    ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->getInfo().title.c_str(), this->activeBeatmap->getInfo().version.c_str());
   ImGui::BeginChild("##");
   uint32_t i = 0;
   for (const Beatmap& beatmap : this->beatmaps)
-    for (const BeatmapInfo& difficulty : beatmap.getDifficulties())
+    for (const BeatmapMetadata& difficulty : beatmap.getDifficulties())
     {
       i++;
       if (!searchText.empty() && !difficulty.title.contains(searchText))
         continue;
 
       if (ImGui::Button(std::format("{} ({})##{}", difficulty.title.c_str(), difficulty.version.c_str(), i).c_str()))
-        // TODO: Figure out why taking a pointer here results in garbage.
-        this->activeBeatmap = difficulty;
+        this->activeBeatmap = std::make_unique<ActiveBeatmapInfo>(difficulty);
     }
   ImGui::EndChild();
   ImGui::End();

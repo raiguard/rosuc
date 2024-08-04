@@ -1,4 +1,4 @@
-#include "BeatmapInfo.hpp"
+#include "Beatmap/BeatmapMetadata.hpp"
 #include "Util.hpp"
 #include <sstream>
 
@@ -29,7 +29,7 @@ std::pair<std::string, std::string> readKeyValue(const std::string& line)
   return {key, value};
 }
 
-BeatmapInfo::BeatmapInfo(const std::string& data)
+BeatmapMetadata::BeatmapMetadata(const std::string& data)
 {
   std::istringstream input(data);
   std::string line;

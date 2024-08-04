@@ -14,7 +14,7 @@ Beatmap::Beatmap(const std::filesystem::path& path)
     Util::panic("Beatmap file contains no difficulties.");
 
   do {
-    BeatmapInfo info(reader.readEntry());
+    BeatmapMetadata info(reader.readEntry());
     if (info.isValid())
       this->difficulties.emplace_back(std::move(info));
   } while (reader.gotoNextEntry());

@@ -1,12 +1,10 @@
 #pragma once
-#include "Beatmap/HitObject.hpp"
 #include <string>
-#include <vector>
 
-class BeatmapInfo
+class BeatmapMetadata
 {
 public:
-  BeatmapInfo(const std::string& data);
+  BeatmapMetadata(const std::string& data);
 
   bool isValid()
   {
@@ -23,6 +21,4 @@ public:
   std::string tags;
   std::string beatmapID;
   std::string beatmapSetID;
-
-  // std::vector<HitObject> hitObjects;
 };
