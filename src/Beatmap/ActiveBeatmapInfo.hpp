@@ -8,8 +8,8 @@ class ActiveBeatmapInfo
 public:
   ActiveBeatmapInfo(const Beatmap& metadata);
 
-  const Beatmap& getInfo() const { return this->metadata; }
+  const Beatmap& getInfo() const { return this->beatmap; }
 
 private:
-  const Beatmap metadata;
+  const Beatmap beatmap;
 };

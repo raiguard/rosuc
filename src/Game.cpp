@@ -9,40 +9,13 @@
 #include <thread>
 #include "Util.hpp"
 
-void Game::initBeatmaps(const std::filesystem::path& path)
-{
-  if (!std::filesystem::exists(path))
-  {
-    std::println("Cannot load beatmaps at '{}': directory does not exist.", path.c_str());
-    return;
-  }
-
-  if (!std::filesystem::is_directory(path))
-    Util::panic("'{}' is not a directory.", path.c_str());
-
-  uint32_t i = 0;
-  for (const auto& entry : std::filesystem::directory_iterator(path))
-    if (entry.is_directory())
-    {
-      BeatmapSet beatmap(entry.path());
-      if (beatmap.getDifficulties().empty())
-        continue;
-      i += beatmap.getDifficulties().size();
-      this->beatmaps.emplace_back(std::move(beatmap));
-    }
-
-  std::println("Loaded {} beatmaps", i);
-
-  std::sort(this->beatmaps.begin(), this->beatmaps.end(), [](const BeatmapSet& a, const BeatmapSet& b)
-  {
-    return a.getDifficulties()[0].title < b.getDifficulties()[0].title;
-  });
-}
-
 void Game::init()
 {
   this->window.reset(new Window());
   this->audioManager.reset(new AudioManager());
+  this->beatmapManager.reset(new BeatmapManager());
+
+  this->beatmapManager->loadDirectory("beatmaps");
 }
 
 Game::ShouldQuit Game::frame()
@@ -121,11 +94,11 @@ void Game::drawDebugGui()
   ImGui::Text("Search:");
   ImGui::SameLine();
   ImGui::InputText("##", &searchText);
-  if (this->activeBeatmap)
-    ImGui::Text("Active beatmap: %s (%s)", this->activeBeatmap->getInfo().title.c_str(), this->activeBeatmap->getInfo().version.c_str());
+  if (const std::unique_ptr<ActiveBeatmapInfo>& activeBeatmap = this->beatmapManager->getActiveBeatmap(); activeBeatmap)
+    ImGui::Text("Active beatmap: %s (%s)", activeBeatmap->getInfo().title.c_str(), activeBeatmap->getInfo().version.c_str());
   ImGui::BeginChild("##");
   uint32_t i = 0;
-  for (const BeatmapSet& beatmapSet : this->beatmaps)
+  for (const BeatmapSet& beatmapSet : this->beatmapManager->getSets())
     for (const Beatmap& beatmap : beatmapSet.getDifficulties())
     {
       i++;
@@ -134,8 +107,8 @@ void Game::drawDebugGui()
 
       if (ImGui::Button(std::format("{} ({})##{}", beatmap.title.c_str(), beatmap.version.c_str(), i).c_str()))
       {
-        this->activeBeatmap = std::make_unique<ActiveBeatmapInfo>(beatmap);
-        this->audioManager->playSong(this->activeBeatmap->getInfo().audio, this->activeBeatmap->getInfo().previewTime, AudioManager::Repeat::True);
+        this->beatmapManager->setActive(beatmap);
+        this->audioManager->playSong(beatmap.audio, beatmap.previewTime, AudioManager::Repeat::True);
       }
     }
   ImGui::EndChild();
