@@ -19,16 +19,31 @@ AudioManager::~AudioManager()
   Mix_CloseAudio();
 }
 
-void AudioManager::playSong(const std::filesystem::path& path, int32_t offset)
+void AudioManager::update()
 {
-  Mix_Music* music = Mix_LoadMUS(path.c_str());
-  if (!music)
-    Util::panic("Could not open music: {}", SDL_GetError());
+  if (this->repeat)
+    this->play();
+}
 
-  Mix_PlayMusic(music, 1000);
+void AudioManager::playSong(const std::filesystem::path& path, int32_t offset, bool repeat)
+{
+  if (this->music)
+    Mix_FreeMusic(this->music);
+  this->music = Mix_LoadMUS(path.c_str());
+  if (!this->music)
+    Util::panic("Could not open music: {}", SDL_GetError());
+  this->offset = offset;
+  this->repeat = repeat;
+  this->play();
+}
+
+void AudioManager::play()
+{
+  if (Mix_PlayingMusic())
+    return;
+
+  Mix_PlayMusic(this->music, 0);
   if (offset > 0)
     if (Mix_SetMusicPosition(double(offset) / 1000.0))
       Util::panic("Failed to set music position");
-
-  this->music = music;
 }
