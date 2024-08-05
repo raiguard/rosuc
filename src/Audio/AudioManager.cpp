@@ -27,6 +27,9 @@ void AudioManager::update()
 
 void AudioManager::playSong(const std::filesystem::path& path, int32_t offset, Repeat repeat)
 {
+  if (path == this->path)
+    return;
+
   if (this->music)
     Mix_FreeMusic(this->music);
   this->music = Mix_LoadMUS(path.c_str());
@@ -34,6 +37,7 @@ void AudioManager::playSong(const std::filesystem::path& path, int32_t offset, R
     Util::panic("Could not open music: {}", SDL_GetError());
   this->offset = offset;
   this->repeat = repeat;
+  this->path = path;
   this->play();
 }
 

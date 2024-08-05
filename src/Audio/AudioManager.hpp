@@ -22,4 +22,5 @@ private:
   Mix_Music* music = nullptr;
   int32_t offset = -1;
   Repeat repeat;
+  std::filesystem::path path;
 };
