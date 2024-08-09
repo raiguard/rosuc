@@ -72,6 +72,9 @@ Window::Window()
   ImGui_ImplSDL2_InitForOpenGL(this->sdlWindow, this->glContext);
   ImGui_ImplOpenGL3_Init();
 
+  // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 4);
+  // glEnable(GL_MULTISAMPLE);
+
   {
     this->triangleShader = createShaderProgram("triangle");
     glGenBuffers(1, &this->triangleVBO);
@@ -92,7 +95,7 @@ Window::Window()
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
     glEnableVertexAttribArray(0);
 
-    SDL_Surface* hitcircle = IMG_Load("assets/hitcircle.png");
+    SDL_Surface* hitcircle = IMG_Load("assets/hitcircle-fixed.png");
     glGenTextures(1, &this->hitcircleTextureID);
     glBindTexture(GL_TEXTURE_2D, this->hitcircleTextureID);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, hitcircle->w, hitcircle->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, hitcircle->pixels);
@@ -143,9 +146,9 @@ void Window::finishDrawing()
     glUniformMatrix4fv(glGetUniformLocation(this->spriteShader, "world"), 1, GL_FALSE, glm::value_ptr(world));
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(300.0f, 300.0f, 0.0f));
-    model = glm::scale(model, glm::vec3(100.0f, 100.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
     glUniformMatrix4fv(glGetUniformLocation(this->spriteShader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-    glUniform3f(glGetUniformLocation(this->spriteShader, "tint"), 1.0f, 1.0f, 1.0f);
+    glUniform3f(glGetUniformLocation(this->spriteShader, "tint"), 0.102f, 0.455f, 0.949f);
     glBindTexture(GL_TEXTURE_2D, this->hitcircleTextureID);
     glBindVertexArray(this->spriteVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
