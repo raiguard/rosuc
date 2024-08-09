@@ -1,6 +1,9 @@
 #include "Window.hpp"
 #include "Util.hpp"
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_access.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl2.h>
@@ -69,19 +72,13 @@ Window::Window()
   ImGui_ImplOpenGL3_Init();
 
   this->triangleShader = createShaderProgram("triangle");
-  static const float vertices[6] = {
-    -0.5f, -0.5f,
-    0.5f, -0.5f,
-    0.0f, 0.5f,
-  };
 
   glGenBuffers(1, &this->triangleVBO);
   glBindBuffer(GL_ARRAY_BUFFER, this->triangleVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(this->triangleVertices), this->triangleVertices, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
-  glUseProgram(this->triangleShader);
 }
 
 Window::~Window()
@@ -109,6 +106,15 @@ void Window::finishDrawing()
   glViewport(0, 0, width, height);
   glClearColor(0, 0, 0, 255);
   glClear(GL_COLOR_BUFFER_BIT);
+
+  glUseProgram(this->triangleShader);
+  glm::mat4 model(1.0f);
+  model = glm::translate(model, glm::vec3(100.0f, 100.0f, 0.0f));
+  model = glm::scale(model, glm::vec3(20.0f, 20.0f, 1.0f));
+  glUniformMatrix4fv(glGetUniformLocation(this->triangleShader, "model"), 1, GL_FALSE, glm::value_ptr(model));
+
+  glm::mat4 world = glm::ortho(0.0f, float(width), float(height), 0.0f, -1.0f, 1.0f);
+  glUniformMatrix4fv(glGetUniformLocation(this->triangleShader, "world"), 1, GL_FALSE, glm::value_ptr(world));
 
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
