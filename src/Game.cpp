@@ -90,6 +90,9 @@ void Game::drawDebugGui()
   static int volume = 10;
   if (ImGui::SliderInt("Volume", &volume, 0, AudioManager::MAX_VOLUME))
     this->audioManager->setVolume(volume);
+  ImGui::Separator();
+  static bool showDemoWindow = false;
+  ImGui::Checkbox("Show demo window", &showDemoWindow);
   ImGui::End();
 
   ImGui::Begin("Beatmaps");
@@ -117,5 +120,6 @@ void Game::drawDebugGui()
   ImGui::EndChild();
   ImGui::End();
 
-  ImGui::ShowDemoWindow();
+  if (showDemoWindow)
+    ImGui::ShowDemoWindow();
 }
