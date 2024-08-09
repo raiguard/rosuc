@@ -32,15 +32,16 @@ private:
   uint32_t spriteVAO;
   static constexpr float spriteVertices[24] = {
     // pos      // tex
-    0.0f, 1.0f, 0.0f, 1.0f,
-    1.0f, 0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.0f, 1.0f,
+    0.5f, -0.5f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.0f, 0.0f,
 
-    0.0f, 1.0f, 0.0f, 1.0f,
-    1.0f, 1.0f, 1.0f, 1.0f,
-    1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, 0.0f, 1.0f,
+    0.5f, 0.5f, 1.0f, 1.0f,
+    0.5f, -0.5f, 1.0f, 0.0f,
   };
 
   std::unique_ptr<Texture> hitcircleTexture;
   std::unique_ptr<Texture> hitcircleOverlayTexture;
+  std::unique_ptr<Texture> hitcircle1;
 };

@@ -57,6 +57,7 @@ Window::Window()
   }
   this->hitcircleTexture = std::make_unique<Texture>("assets/hitcircle.png");
   this->hitcircleOverlayTexture = std::make_unique<Texture>("assets/hitcircleoverlay.png");
+  this->hitcircle1 = std::make_unique<Texture>("assets/default-1.png");
 }
 
 Window::~Window()
@@ -90,7 +91,7 @@ void Window::finishDrawing()
   this->spriteShader->bind();
   this->spriteShader->setMat4("world", world);
 
-  for (float i = 300.0f; i < 600.0f; i += 25.0f)
+  for (float i = 300.0f; i < 600.0f; i += 45.2f)
   {
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(i, i, 0.0f));
@@ -102,6 +103,12 @@ void Window::finishDrawing()
     glDrawArrays(GL_TRIANGLES, 0, 6);
     this->hitcircleOverlayTexture->bind();
     this->spriteShader->setVec4("tint", 1.0f, 1.0f, 1.0f, 1.0f);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    this->hitcircle1->bind();
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(i, i, 0.0f));
+    model = glm::scale(model, glm::vec3(41.0f, 60.0f, 1.0f));
+    this->spriteShader->setMat4("model", model);
     glDrawArrays(GL_TRIANGLES, 0, 6);
   }
 
