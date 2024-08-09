@@ -19,9 +19,9 @@ public:
   void setVec4(const std::string& name, float x, float y, float z, float w) const;
   void setVec4(const std::string& name, glm::vec4 value) const;
 
-  uint32_t getID() const { return this->id; }
+  GLuint getID() const { return this->id; }
 
 private:
-  static uint32_t compile(GLenum type, const std::filesystem::path& path);
-  uint32_t id;
+  static GLuint compile(GLenum type, const std::filesystem::path& path);
+  GLuint id;
 };

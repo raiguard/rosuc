@@ -1,5 +1,6 @@
 #pragma once
 #include "Graphics/Shader.hpp"
+#include "Graphics/Texture.hpp"
 #include <SDL_video.h>
 #include <utility>
 
@@ -40,7 +41,6 @@ private:
     1.0f, 0.0f, 1.0f, 0.0f,
   };
 
-
-  uint32_t hitcircleTextureID;
-  uint32_t hitcircleOverlayTextureID;
+  std::unique_ptr<Texture> hitcircleTexture;
+  std::unique_ptr<Texture> hitcircleOverlayTexture;
 };

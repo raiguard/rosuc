@@ -55,22 +55,8 @@ Window::Window()
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
     glEnableVertexAttribArray(0);
   }
-  {
-    SDL_Surface* surface = IMG_Load("assets/hitcircle.png");
-    glGenTextures(1, &this->hitcircleTextureID);
-    glBindTexture(GL_TEXTURE_2D, this->hitcircleTextureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    SDL_FreeSurface(surface);
-  }
-  {
-    SDL_Surface* surface = IMG_Load("assets/hitcircleoverlay.png");
-    glGenTextures(1, &this->hitcircleOverlayTextureID);
-    glBindTexture(GL_TEXTURE_2D, this->hitcircleOverlayTextureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    SDL_FreeSurface(surface);
-  }
+  this->hitcircleTexture = std::make_unique<Texture>("assets/hitcircle.png");
+  this->hitcircleOverlayTexture = std::make_unique<Texture>("assets/hitcircleoverlay.png");
 }
 
 Window::~Window()
@@ -110,10 +96,10 @@ void Window::finishDrawing()
     model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
     this->spriteShader->setMat4("model", model);
     this->spriteShader->setVec4("tint", 0.102f, 0.455f, 0.949f, 1.0f);
-    glBindTexture(GL_TEXTURE_2D, this->hitcircleTextureID);
+    this->hitcircleTexture->bind();
     glBindVertexArray(this->spriteVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindTexture(GL_TEXTURE_2D, this->hitcircleOverlayTextureID);
+    this->hitcircleOverlayTexture->bind();
     this->spriteShader->setVec4("tint", 1.0f, 1.0f, 1.0f, 1.0f);
     glDrawArrays(GL_TRIANGLES, 0, 6);
   }
