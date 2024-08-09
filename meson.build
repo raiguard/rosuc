@@ -9,6 +9,7 @@ imgui = dependency('imgui')
 minizip = dependency('minizip')
 sdl = dependency('sdl2')
 sdl_mixer = dependency('sdl2_mixer')
+glm = dependency('glm')
 
 # criterion_proj = subproject('criterion')
 # criterion_dep = criterion_proj.get_variable('criterion')
@@ -18,5 +19,5 @@ sources = c.stdout().strip().split('\n')
 executable('rosuc', sources,
            link_with: glad,
            include_directories: ['src', glad_includes],
-           dependencies: [imgui, minizip, sdl, sdl_mixer],
+           dependencies: [imgui, minizip, sdl, sdl_mixer, glm],
            cpp_args: ['-Wall', '-Werror'])
