@@ -10,6 +10,8 @@ AudioManager::AudioManager()
 
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096))
     Util::panic("Failed to open audio device: {}", SDL_GetError());
+
+  Mix_VolumeMusic(10);
 }
 
 AudioManager::~AudioManager()
