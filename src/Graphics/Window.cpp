@@ -19,7 +19,7 @@ Window::Window()
 
   SDL_GL_LoadLibrary(nullptr);
 
-  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
   if (!this->sdlWindow)
     Util::panic("Failed to create SDL window: {}", SDL_GetError());
 
@@ -27,7 +27,7 @@ Window::Window()
   if (!this->glContext)
     Util::panic("Failed to create OpenGL context: {}", SDL_GetError());
 
-  gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
+  gladLoadGLLoader(SDL_GL_GetProcAddress);
   std::println("OpenGL version: {}", (const char*)(glGetString(GL_VERSION)));
 
   IMGUI_CHECKVERSION();
