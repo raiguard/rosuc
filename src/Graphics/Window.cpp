@@ -9,6 +9,7 @@
 #include <imgui_impl_sdl2.h>
 #include <print>
 #include <SDL.h>
+#include <SDL_image.h>
 
 uint32_t compileShader(GLenum type, const std::filesystem::path& path)
 {
@@ -71,14 +72,33 @@ Window::Window()
   ImGui_ImplSDL2_InitForOpenGL(this->sdlWindow, this->glContext);
   ImGui_ImplOpenGL3_Init();
 
-  this->triangleShader = createShaderProgram("triangle");
+  {
+    this->triangleShader = createShaderProgram("triangle");
+    glGenBuffers(1, &this->triangleVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->triangleVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(this->triangleVertices), this->triangleVertices, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &this->triangleVAO);
+    glBindVertexArray(this->triangleVAO);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    glEnableVertexAttribArray(0);
+  }
+  {
+    this->spriteShader = createShaderProgram("sprite");
+    glGenBuffers(1, &this->spriteVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->spriteVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(this->spriteVertices), this->spriteVertices, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &this->spriteVAO);
+    glBindVertexArray(this->spriteVAO);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+    glEnableVertexAttribArray(0);
 
-  glGenBuffers(1, &this->triangleVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, this->triangleVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(this->triangleVertices), this->triangleVertices, GL_STATIC_DRAW);
-
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    SDL_Surface* hitcircle = IMG_Load("assets/hitcircle.png");
+    glGenTextures(1, &this->hitcircleTextureID);
+    glBindTexture(GL_TEXTURE_2D, this->hitcircleTextureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, hitcircle->w, hitcircle->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, hitcircle->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    SDL_FreeSurface(hitcircle);
+  }
 }
 
 Window::~Window()
@@ -107,16 +127,29 @@ void Window::finishDrawing()
   glClearColor(0, 0, 0, 255);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glUseProgram(this->triangleShader);
-  glm::mat4 model(1.0f);
-  model = glm::translate(model, glm::vec3(100.0f, 100.0f, 0.0f));
-  model = glm::scale(model, glm::vec3(20.0f, 20.0f, 1.0f));
-  glUniformMatrix4fv(glGetUniformLocation(this->triangleShader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
   glm::mat4 world = glm::ortho(0.0f, float(width), float(height), 0.0f, -1.0f, 1.0f);
-  glUniformMatrix4fv(glGetUniformLocation(this->triangleShader, "world"), 1, GL_FALSE, glm::value_ptr(world));
-
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  {
+    glUseProgram(this->triangleShader);
+    glUniformMatrix4fv(glGetUniformLocation(this->triangleShader, "world"), 1, GL_FALSE, glm::value_ptr(world));
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, glm::vec3(200.0f, 200.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(20.0f, 20.0f, 1.0f));
+    glUniformMatrix4fv(glGetUniformLocation(this->triangleShader, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glBindVertexArray(this->triangleVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+  }
+  {
+    glUseProgram(this->spriteShader);
+    glUniformMatrix4fv(glGetUniformLocation(this->spriteShader, "world"), 1, GL_FALSE, glm::value_ptr(world));
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, glm::vec3(300.0f, 300.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(100.0f, 100.0f, 1.0f));
+    glUniformMatrix4fv(glGetUniformLocation(this->spriteShader, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniform3f(glGetUniformLocation(this->spriteShader, "tint"), 1.0f, 1.0f, 1.0f);
+    glBindTexture(GL_TEXTURE_2D, this->hitcircleTextureID);
+    glBindVertexArray(this->spriteVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+  }
 
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   SDL_GL_SwapWindow(this->sdlWindow);

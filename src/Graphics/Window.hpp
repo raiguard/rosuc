@@ -27,10 +27,27 @@ private:
 
   uint32_t triangleShader;
   uint32_t triangleVBO;
-
+  uint32_t triangleVAO;
   static constexpr float triangleVertices[6] = {
     -1.0f, 1.0f,
     1.0f, 1.0f,
     0.0f, -1.0f,
   };
+
+  uint32_t spriteShader;
+  uint32_t spriteVBO;
+  uint32_t spriteVAO;
+  static constexpr float spriteVertices[24] = {
+    // pos      // tex
+    0.0f, 1.0f, 0.0f, 1.0f,
+    1.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f,
+
+    0.0f, 1.0f, 0.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 0.0f, 1.0f, 0.0f,
+  };
+
+
+  uint32_t hitcircleTextureID;
 };

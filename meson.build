@@ -8,6 +8,7 @@ glad = library('glad', 'lib/glad/src/glad.c',
 imgui = dependency('imgui')
 minizip = dependency('minizip')
 sdl = dependency('sdl2')
+sdl_image = dependency('sdl2_image')
 sdl_mixer = dependency('sdl2_mixer')
 glm = dependency('glm')
 
@@ -19,5 +20,5 @@ sources = c.stdout().strip().split('\n')
 executable('rosuc', sources,
            link_with: glad,
            include_directories: ['src', glad_includes],
-           dependencies: [imgui, minizip, sdl, sdl_mixer, glm],
+           dependencies: [imgui, minizip, sdl, sdl_mixer, sdl_image, glm],
            cpp_args: ['-Wall', '-Werror'])
