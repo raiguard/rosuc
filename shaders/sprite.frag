@@ -8,5 +8,8 @@ uniform vec3 tint;
 
 void main()
 {
-  color = vec4(tint, 1.0) * texture(image, TexCoords);
+  vec4 texColor = texture(image, TexCoords);
+  if (texColor.a < 0.1)
+    discard;
+  color = vec4(tint, 1.0) * texColor;
 }
