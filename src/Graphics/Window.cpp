@@ -67,6 +67,7 @@ Window::~Window()
 
   SDL_GL_DeleteContext(this->glContext);
   SDL_DestroyWindow(this->sdlWindow);
+  IMG_Quit();
   SDL_Quit();
 }
 
