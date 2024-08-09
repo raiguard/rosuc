@@ -87,6 +87,9 @@ void Game::drawDebugGui()
     window->setVsync(useVsync);
   ImGui::Separator();
   ImGui::Text("Audio driver: %s", SDL_GetCurrentAudioDriver());
+  static int volume = 10;
+  if (ImGui::SliderInt("Volume", &volume, 0, AudioManager::MAX_VOLUME))
+    this->audioManager->setVolume(volume);
   ImGui::End();
 
   ImGui::Begin("Beatmaps");

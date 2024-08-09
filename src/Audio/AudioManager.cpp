@@ -53,3 +53,8 @@ void AudioManager::play()
     if (Mix_SetMusicPosition(double(offset) / 1000.0))
       Util::panic("Failed to set music position");
 }
+
+void AudioManager::setVolume(int volume)
+{
+  Mix_VolumeMusic(volume);
+}
