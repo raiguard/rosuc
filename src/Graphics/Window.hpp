@@ -9,6 +9,7 @@ public:
   ~Window();
 
   void beginDrawing();
+  void extracted();
   void finishDrawing();
 
   void setVsync(bool value);
@@ -18,7 +19,12 @@ public:
   std::pair<int, int> getTrueSize();
   std::pair<int, int> getScaledSize();
 
+  void testGraphics();
+
 private:
   SDL_Window* sdlWindow;
   SDL_GLContext glContext;
+
+  uint32_t triangleShader;
+  uint32_t triangleVBO;
 };

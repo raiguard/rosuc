@@ -7,6 +7,41 @@
 #include <print>
 #include <SDL.h>
 
+uint32_t compileShader(GLenum type, const std::filesystem::path& path)
+{
+  uint32_t id = glCreateShader(type);
+  std::string source = Util::readFile(path);
+  const char* src = source.c_str();
+  glShaderSource(id, 1, &src, nullptr);
+  glCompileShader(id);
+
+  int result;
+  glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+  if (result)
+    return id;
+
+  int length;
+  glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+  std::string message;
+  message.resize(length);
+  glGetShaderInfoLog(id, length, &length, message.data());
+  Util::panic("Failed to compile shader {}:\n\t{}", path.c_str(), message);
+}
+
+uint32_t createShaderProgram(const std::string& name)
+{
+  uint32_t program = glCreateProgram();
+  uint32_t vertex = compileShader(GL_VERTEX_SHADER, "shaders/" + name + ".vert");
+  uint32_t fragment = compileShader(GL_FRAGMENT_SHADER, "shaders/" + name + ".frag");
+  glAttachShader(program, vertex);
+  glAttachShader(program, fragment);
+  glLinkProgram(program);
+  glValidateProgram(program);
+  glDeleteShader(vertex);
+  glDeleteShader(fragment);
+  return program;
+}
+
 Window::Window()
 {
   // SDL_SetHint(SDL_HINT_EVENT_LOGGING, "2");
@@ -15,7 +50,7 @@ Window::Window()
 
   SDL_GL_LoadLibrary(nullptr);
 
-  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+  this->sdlWindow = SDL_CreateWindow("Rai's osu!standard clone", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
   if (!this->sdlWindow)
     Util::panic("Failed to create SDL window: {}", SDL_GetError());
 
@@ -32,6 +67,21 @@ Window::Window()
 
   ImGui_ImplSDL2_InitForOpenGL(this->sdlWindow, this->glContext);
   ImGui_ImplOpenGL3_Init();
+
+  this->triangleShader = createShaderProgram("triangle");
+  static const float vertices[6] = {
+    -0.5f, -0.5f,
+    0.5f, -0.5f,
+    0.0f, 0.5f,
+  };
+
+  glGenBuffers(1, &this->triangleVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, this->triangleVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+  glUseProgram(this->triangleShader);
 }
 
 Window::~Window()
@@ -59,6 +109,9 @@ void Window::finishDrawing()
   glViewport(0, 0, width, height);
   glClearColor(0, 0, 0, 255);
   glClear(GL_COLOR_BUFFER_BIT);
+
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   SDL_GL_SwapWindow(this->sdlWindow);
 }
