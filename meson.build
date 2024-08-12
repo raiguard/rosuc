@@ -12,8 +12,8 @@ sdl_image = dependency('sdl2_image')
 sdl_mixer = dependency('sdl2_mixer')
 glm = dependency('glm')
 
-# criterion_proj = subproject('criterion')
-# criterion_dep = criterion_proj.get_variable('criterion')
+criterion_proj = subproject('criterion')
+criterion_dep = criterion_proj.get_variable('criterion')
 
 c = run_command('scripts/find_sources.sh', check: true)
 sources = c.stdout().strip().split('\n')
@@ -21,4 +21,12 @@ executable('rosuc', sources,
            link_with: glad,
            include_directories: ['src', glad_includes],
            dependencies: [imgui, minizip, sdl, sdl_mixer, sdl_image, glm],
+           cpp_args: ['-Wall', '-Werror'])
+
+c2 = run_command('scripts/find_sources.sh', 'tests', check: true)
+sources2 = c2.stdout().strip().split('\n')
+executable('rosuc-test', sources2,
+           link_with: glad,
+           include_directories: ['src', 'tests', glad_includes],
+           dependencies: [imgui, minizip, sdl, sdl_mixer, sdl_image, glm, criterion_dep],
            cpp_args: ['-Wall', '-Werror'])
