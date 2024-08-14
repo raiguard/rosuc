@@ -58,6 +58,12 @@ Window::Window()
   this->hitcircleTexture = std::make_unique<Texture>("assets/hitcircle.png");
   this->hitcircleOverlayTexture = std::make_unique<Texture>("assets/hitcircleoverlay.png");
   this->hitcircle1 = std::make_unique<Texture>("assets/default-1.png");
+
+  SDL_Surface* cursorSurface = IMG_Load("assets/cursor.png");
+  this->cursor = SDL_CreateColorCursor(cursorSurface, cursorSurface->w / 2, cursorSurface->h / 2);
+  if (!this->cursor)
+    Util::panic("Failed to create cursor: {}", SDL_GetError());
+  SDL_FreeSurface(cursorSurface);
 }
 
 Window::~Window()
@@ -65,6 +71,8 @@ Window::~Window()
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplSDL2_Shutdown();
   ImGui::DestroyContext();
+
+  SDL_FreeCursor(this->cursor);
 
   SDL_GL_DeleteContext(this->glContext);
   SDL_DestroyWindow(this->sdlWindow);
@@ -113,6 +121,7 @@ void Window::finishDrawing()
   }
 
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  SDL_SetCursor(this->cursor);
   SDL_GL_SwapWindow(this->sdlWindow);
 }
 

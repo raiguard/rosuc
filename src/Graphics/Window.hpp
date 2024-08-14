@@ -1,6 +1,7 @@
 #pragma once
 #include "Graphics/Shader.hpp"
 #include "Graphics/Texture.hpp"
+#include <SDL_mouse.h>
 #include <SDL_video.h>
 #include <utility>
 
@@ -44,4 +45,5 @@ private:
   std::unique_ptr<Texture> hitcircleTexture;
   std::unique_ptr<Texture> hitcircleOverlayTexture;
   std::unique_ptr<Texture> hitcircle1;
+  SDL_Cursor* cursor;
 };

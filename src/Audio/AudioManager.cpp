@@ -6,7 +6,7 @@
 AudioManager::AudioManager()
 {
   if (SDL_Init(SDL_INIT_AUDIO))
-    Util::panic("Failed to initialize SDL: {}", SDL_GetError());
+    Util::panic("Failed to initialize SDL audio: {}", SDL_GetError());
 
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096))
     Util::panic("Failed to open audio device: {}", SDL_GetError());
