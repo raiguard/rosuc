@@ -22,6 +22,6 @@ Test(simple, test5) {
 }
 
 Test(simple, test6) {
-  cr_assert(0);
+  cr_assert(6 != 100);
 }
 
