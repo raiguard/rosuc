@@ -54,8 +54,18 @@ Window::Window()
     glBufferData(GL_ARRAY_BUFFER, sizeof(this->spriteVertices), this->spriteVertices, GL_STATIC_DRAW);
     glGenVertexArrays(1, &this->spriteVAO);
     glBindVertexArray(this->spriteVAO);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+  }
+  {
+    this->rectShader = std::make_unique<Shader>("shaders/rectangle.vert", "shaders/rectangle.frag");
+    glGenBuffers(1, &this->rectVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->rectVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(this->rectVertices), this->rectVertices, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &this->rectVAO);
+    glBindVertexArray(this->rectVAO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
   }
   this->hitcircleTexture = std::make_unique<Texture>("assets/hitcircle.png");
   this->hitcircleOverlayTexture = std::make_unique<Texture>("assets/hitcircleoverlay.png");
@@ -98,14 +108,14 @@ void Window::finishDrawing()
   glClear(GL_COLOR_BUFFER_BIT);
 
   glm::mat4 world = glm::ortho(0.0f, float(width), float(height), 0.0f, -1.0f, 1.0f);
-  this->spriteShader->bind();
-  this->spriteShader->setMat4("world", world);
 
   for (float i = 300.0f; i < 600.0f; i += 45.2f)
   {
     glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(i, i, 0.0f));
     model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
+    this->spriteShader->bind();
+    this->spriteShader->setMat4("world", world);
     this->spriteShader->setMat4("model", model);
     this->spriteShader->setVec4("tint", 0.102f, 0.455f, 0.949f, 1.0f);
     this->hitcircleTexture->bind();
@@ -119,6 +129,19 @@ void Window::finishDrawing()
     model = glm::translate(model, glm::vec3(i, i, 0.0f));
     model = glm::scale(model, glm::vec3(41.0f, 60.0f, 1.0f));
     this->spriteShader->setMat4("model", model);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindTexture(GL_TEXTURE_2D, 0);
+  }
+
+  {
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, glm::vec3(100.0f, 100.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
+    this->rectShader->bind();
+    this->rectShader->setMat4("world", world);
+    this->rectShader->setMat4("model", model);
+    this->rectShader->setVec4("inColor", 1.0f, 0.0f, 0.0f, 1.0f);
+    glBindVertexArray(this->rectVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
   }
 

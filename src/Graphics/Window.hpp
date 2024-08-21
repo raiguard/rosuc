@@ -42,6 +42,20 @@ private:
     0.5f, -0.5f, 1.0f, 0.0f,
   };
 
+  std::unique_ptr<Shader> rectShader;
+  uint32_t rectVBO;
+  uint32_t rectVAO;
+  static constexpr float rectVertices[12] = {
+    // pos
+    -0.5f, 0.5f,
+    0.5f, -0.5f,
+    -0.5f, -0.5f,
+
+    -0.5f, 0.5f,
+    0.5f, 0.5f,
+    0.5f, -0.5f,
+  };
+
   std::unique_ptr<Texture> hitcircleTexture;
   std::unique_ptr<Texture> hitcircleOverlayTexture;
   std::unique_ptr<Texture> hitcircle1;
