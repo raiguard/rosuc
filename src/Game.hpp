@@ -9,8 +9,7 @@ class Game
 {
 public:
   using ShouldQuit = NamedBool<class ShouldQuitTag>;
-
-  void init();
+  Game();
   ShouldQuit frame();
 
 private:

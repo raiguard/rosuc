@@ -9,12 +9,11 @@
 #include <thread>
 #include "Util.hpp"
 
-void Game::init()
+Game::Game()
+  : window(new Window())
+  , audioManager(new AudioManager())
+  , beatmapManager(new BeatmapManager())
 {
-  this->window.reset(new Window());
-  this->audioManager.reset(new AudioManager());
-  this->beatmapManager.reset(new BeatmapManager());
-
   this->beatmapManager->loadDirectory("beatmaps");
 }
 
