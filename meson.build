@@ -20,7 +20,7 @@ sources = c.stdout().strip().split('\n')
 executable('rosuc', sources,
            link_with: glad,
            include_directories: ['src', glad_includes],
-           dependencies: [imgui, minizip, sdl, sdl_mixer, sdl_image, glm],
+           dependencies: [glm, imgui, minizip, sdl, sdl_image, sdl_mixer],
            cpp_args: ['-Wall', '-Werror'])
 
 c2 = run_command('scripts/find_sources.sh', 'tests', check: true)

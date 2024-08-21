@@ -2,8 +2,7 @@
 
 int main()
 {
-  Game game;
-  game.init();
-
-  while (!game.frame());
+  auto game = std::make_unique<Game>();
+  game->init();
+  while (!game->frame());
 }
