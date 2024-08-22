@@ -13,6 +13,8 @@ Texture::Texture(const std::filesystem::path& path)
   // TODO: Ensure that it's RGBA8888
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
   glGenerateMipmap(GL_TEXTURE_2D);
+  this->width = surface->w;
+  this->height = surface->h;
   SDL_FreeSurface(surface);
 }
 

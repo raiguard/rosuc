@@ -44,9 +44,6 @@ Window::Window()
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 4);
-  glEnable(GL_MULTISAMPLE);
-
   {
     this->spriteShader = std::make_unique<Shader>("shaders/sprite.vert", "shaders/sprite.frag");
     glGenBuffers(1, &this->spriteVBO);
@@ -113,11 +110,11 @@ void Window::finishDrawing()
   this->rectShader->bind();
   this->rectShader->setMat4("world", world);
 
-  for (float i = 300.0f; i < 600.0f; i += 45.2f)
+  for (float i = 300.0f; i < 600.0f; i += 128.0f)
   {
     this->drawSprite(this->hitcircleTexture, i, i, 128.0f, 128.0f, glm::vec4(0.102f, 0.455f, 0.949f, 1.0f));
     this->drawSprite(this->hitcircleOverlayTexture, i, i, 128.0f, 128.0f);
-    this->drawSprite(this->hitcircle1, i, i, 41.0f, 60.0f);
+    this->drawSprite(this->hitcircle1, i, i, float(this->hitcircle1->getWidth()) * 0.8f, float(this->hitcircle1->getHeight()) * 0.8f);
   }
 
   {
@@ -163,8 +160,11 @@ void Window::drawSprite(const std::unique_ptr<Texture>& texture, float x, float 
   this->spriteShader->bind();
   this->spriteShader->setMat4("model", model);
   this->spriteShader->setVec4("tint", tint);
+
   glActiveTexture(GL_TEXTURE0);
   texture->bind();
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glBindVertexArray(this->spriteVAO);
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }

@@ -11,6 +11,11 @@ public:
 
   GLuint getID() const { return this->id; }
 
+  int getWidth() const { return this->width; }
+  int getHeight() const { return this->height; }
+
 private:
   GLuint id;
+  int width;
+  int height;
 };
