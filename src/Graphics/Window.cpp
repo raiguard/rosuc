@@ -108,29 +108,16 @@ void Window::finishDrawing()
   glClear(GL_COLOR_BUFFER_BIT);
 
   glm::mat4 world = glm::ortho(0.0f, float(width), float(height), 0.0f, -1.0f, 1.0f);
+  this->spriteShader->bind();
+  this->spriteShader->setMat4("world", world);
+  this->rectShader->bind();
+  this->rectShader->setMat4("world", world);
 
   for (float i = 300.0f; i < 600.0f; i += 45.2f)
   {
-    glm::mat4 model(1.0f);
-    model = glm::translate(model, glm::vec3(i, i, 0.0f));
-    model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
-    this->spriteShader->bind();
-    this->spriteShader->setMat4("world", world);
-    this->spriteShader->setMat4("model", model);
-    this->spriteShader->setVec4("tint", 0.102f, 0.455f, 0.949f, 1.0f);
-    this->hitcircleTexture->bind();
-    glBindVertexArray(this->spriteVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    this->hitcircleOverlayTexture->bind();
-    this->spriteShader->setVec4("tint", 1.0f, 1.0f, 1.0f, 1.0f);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    this->hitcircle1->bind();
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(i, i, 0.0f));
-    model = glm::scale(model, glm::vec3(41.0f, 60.0f, 1.0f));
-    this->spriteShader->setMat4("model", model);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    this->drawSprite(this->hitcircleTexture, i, i, 128.0f, 128.0f, glm::vec4(0.102f, 0.455f, 0.949f, 1.0f));
+    this->drawSprite(this->hitcircleOverlayTexture, i, i, 128.0f, 128.0f);
+    this->drawSprite(this->hitcircle1, i, i, 41.0f, 60.0f);
   }
 
   {
@@ -138,7 +125,6 @@ void Window::finishDrawing()
     model = glm::translate(model, glm::vec3(100.0f, 100.0f, 0.0f));
     model = glm::scale(model, glm::vec3(128.0f, 128.0f, 1.0f));
     this->rectShader->bind();
-    this->rectShader->setMat4("world", world);
     this->rectShader->setMat4("model", model);
     this->rectShader->setVec4("inColor", 1.0f, 0.0f, 0.0f, 1.0f);
     glBindVertexArray(this->rectVAO);
@@ -167,4 +153,18 @@ std::pair<int, int> Window::getScaledSize()
   int width, height;
   SDL_GetWindowSize(this->sdlWindow, &width, &height);
   return {width, height};
+}
+
+void Window::drawSprite(const std::unique_ptr<Texture>& texture, float x, float y, float width, float height, glm::vec4 tint)
+{
+  glm::mat4 model(1.0f);
+  model = glm::translate(model, glm::vec3(x, y, 0.0f));
+  model = glm::scale(model, glm::vec3(width, height, 1.0f));
+  this->spriteShader->bind();
+  this->spriteShader->setMat4("model", model);
+  this->spriteShader->setVec4("tint", tint);
+  glActiveTexture(GL_TEXTURE0);
+  texture->bind();
+  glBindVertexArray(this->spriteVAO);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
 }

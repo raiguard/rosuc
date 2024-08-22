@@ -1,6 +1,7 @@
 #pragma once
 #include "Graphics/Shader.hpp"
 #include "Graphics/Texture.hpp"
+#include <glm/glm.hpp>
 #include <SDL_mouse.h>
 #include <SDL_video.h>
 #include <utility>
@@ -17,7 +18,10 @@ public:
 
   void setVsync(bool value);
 
-  void drawDebugGui();
+  void drawSprite(const std::unique_ptr<Texture>& texture,
+                  float x, float y,
+                  float width, float height,
+                  glm::vec4 tint = glm::vec4(1.0f));
 
   std::pair<int, int> getTrueSize();
   std::pair<int, int> getScaledSize();
