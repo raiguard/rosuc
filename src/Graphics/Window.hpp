@@ -18,7 +18,7 @@ public:
 
   void setVsync(bool value);
 
-  void drawSprite(const std::unique_ptr<Texture>& texture,
+  void drawSprite(Texture* texture,
                   float x, float y,
                   float width, float height,
                   glm::vec4 tint = glm::vec4(1.0f));
@@ -62,6 +62,15 @@ private:
 
   std::unique_ptr<Texture> hitcircleTexture;
   std::unique_ptr<Texture> hitcircleOverlayTexture;
+  std::unique_ptr<Texture> hitcircle0;
   std::unique_ptr<Texture> hitcircle1;
+  std::unique_ptr<Texture> hitcircle2;
+  std::unique_ptr<Texture> hitcircle3;
+  std::unique_ptr<Texture> hitcircle4;
+  std::unique_ptr<Texture> hitcircle5;
+  std::unique_ptr<Texture> hitcircle6;
+  std::unique_ptr<Texture> hitcircle7;
+  std::unique_ptr<Texture> hitcircle8;
+  std::unique_ptr<Texture> hitcircle9;
   SDL_Cursor* cursor;
 };

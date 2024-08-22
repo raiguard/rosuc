@@ -66,7 +66,16 @@ Window::Window()
   }
   this->hitcircleTexture = std::make_unique<Texture>("assets/hitcircle.png");
   this->hitcircleOverlayTexture = std::make_unique<Texture>("assets/hitcircleoverlay.png");
+  this->hitcircle0 = std::make_unique<Texture>("assets/default-0.png");
   this->hitcircle1 = std::make_unique<Texture>("assets/default-1.png");
+  this->hitcircle2 = std::make_unique<Texture>("assets/default-2.png");
+  this->hitcircle3 = std::make_unique<Texture>("assets/default-3.png");
+  this->hitcircle4 = std::make_unique<Texture>("assets/default-4.png");
+  this->hitcircle5 = std::make_unique<Texture>("assets/default-5.png");
+  this->hitcircle6 = std::make_unique<Texture>("assets/default-6.png");
+  this->hitcircle7 = std::make_unique<Texture>("assets/default-7.png");
+  this->hitcircle8 = std::make_unique<Texture>("assets/default-8.png");
+  this->hitcircle9 = std::make_unique<Texture>("assets/default-9.png");
 
   SDL_Surface* cursorSurface = IMG_Load("assets/cursor.png");
   this->cursor = SDL_CreateColorCursor(cursorSurface, cursorSurface->w / 2, cursorSurface->h / 2);
@@ -110,11 +119,26 @@ void Window::finishDrawing()
   this->rectShader->bind();
   this->rectShader->setMat4("world", world);
 
-  for (float i = 300.0f; i < 600.0f; i += 128.0f)
+  const std::array<Texture*, 10> numberTextures = {
+    this->hitcircle0.get(),
+    this->hitcircle1.get(),
+    this->hitcircle2.get(),
+    this->hitcircle3.get(),
+    this->hitcircle4.get(),
+    this->hitcircle5.get(),
+    this->hitcircle6.get(),
+    this->hitcircle7.get(),
+    this->hitcircle8.get(),
+    this->hitcircle9.get(),
+  };
+  int j = 8;
+  for (float i = 600.0f; i >= 300.0f; i -= 50.0f)
   {
-    this->drawSprite(this->hitcircleTexture, i, i, 128.0f, 128.0f, glm::vec4(0.102f, 0.455f, 0.949f, 1.0f));
-    this->drawSprite(this->hitcircleOverlayTexture, i, i, 128.0f, 128.0f);
-    this->drawSprite(this->hitcircle1, i, i, float(this->hitcircle1->getWidth()) * 0.8f, float(this->hitcircle1->getHeight()) * 0.8f);
+    j--;
+    float alpha = 300.0f / (i + ((i - 300.0f) * 2));
+    this->drawSprite(this->hitcircleTexture.get(), i, i, 128.0f, 128.0f, glm::vec4(0.102f, 0.455f, 0.949f, alpha));
+    this->drawSprite(this->hitcircleOverlayTexture.get(), i, i, 128.0f, 128.0f, glm::vec4(1.0f, 1.0f, 1.0f, alpha));
+    this->drawSprite(numberTextures[j], i, i, float(this->hitcircle1->getWidth()) * 0.8f, float(this->hitcircle1->getHeight()) * 0.8f, glm::vec4(1.0f, 1.0f, 1.0f, alpha));
   }
 
   {
@@ -152,7 +176,7 @@ std::pair<int, int> Window::getScaledSize()
   return {width, height};
 }
 
-void Window::drawSprite(const std::unique_ptr<Texture>& texture, float x, float y, float width, float height, glm::vec4 tint)
+void Window::drawSprite(Texture* texture, float x, float y, float width, float height, glm::vec4 tint)
 {
   glm::mat4 model(1.0f);
   model = glm::translate(model, glm::vec3(x, y, 0.0f));
