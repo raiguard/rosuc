@@ -1,6 +1,7 @@
 #pragma once
-
 #include <filesystem>
+#include <iostream>
+#include <SDL_messagebox.h>
 
 namespace Util
 {
@@ -8,7 +9,10 @@ namespace Util
   [[noreturn]]
   inline void panic(std::format_string<T...> format, T&&... args)
   {
-    throw std::runtime_error(std::format(format, std::forward<T>(args)...));
+    std::string err = std::format(format, std::forward<T>(args)...);
+    std::println(std::cerr, "ERROR: {}", err);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Critical error", err.c_str(), nullptr);
+    std::exit(1);
   }
 
   std::string readFile(const std::filesystem::path& path);
