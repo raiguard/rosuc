@@ -7,4 +7,7 @@ setup:
 run: all
 	build/rosuc
 
+test: all
+	build/rosuc-test --color=always
+
 .PHONY: all setup run
