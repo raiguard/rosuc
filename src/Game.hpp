@@ -3,7 +3,6 @@
 #include "Beatmap/BeatmapManager.hpp"
 #include "Graphics/Window.hpp"
 #include "NamedBool.hpp"
-#include <memory>
 
 class Game
 {
@@ -17,9 +16,9 @@ private:
   ShouldQuit update();
   void drawDebugGui();
 
-  std::unique_ptr<Window> window;
-  std::unique_ptr<AudioManager> audioManager;
-  std::unique_ptr<BeatmapManager> beatmapManager;
+  Window window;
+  AudioManager audioManager;
+  BeatmapManager beatmapManager;
 
   static constexpr uint32_t UPS = 1000;
 };

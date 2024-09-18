@@ -10,11 +10,8 @@
 #include "Util.hpp"
 
 Game::Game()
-  : window(new Window())
-  , audioManager(new AudioManager())
-  , beatmapManager(new BeatmapManager())
 {
-  this->beatmapManager->loadDirectory("beatmaps");
+  this->beatmapManager.loadDirectory("beatmaps");
 }
 
 Game::ShouldQuit Game::frame()
@@ -42,9 +39,9 @@ Game::ShouldQuit Game::frame()
     accumulator -= timestep;
   }
 
-  this->window->beginDrawing();
+  this->window.beginDrawing();
   this->drawDebugGui();
-  this->window->finishDrawing();
+  this->window.finishDrawing();
 
   // Cap framerate at max simulation speed
   std::chrono::duration thisFrameTime = Clock::now() - lastFrameTime;
@@ -71,7 +68,7 @@ Game::ShouldQuit Game::handleEvents()
 
 Game::ShouldQuit Game::update()
 {
-  this->audioManager->update();
+  this->audioManager.update();
   return ShouldQuit::False;
 }
 
@@ -83,12 +80,12 @@ void Game::drawDebugGui()
   ImGui::Text("Render: %.1f FPS (%.3f ms/frame)", io.Framerate, 1000.0f / io.Framerate);
   static bool useVsync = true;
   if (ImGui::Checkbox("Use vsync", &useVsync))
-    window->setVsync(useVsync);
+    window.setVsync(useVsync);
   ImGui::Separator();
   ImGui::Text("Audio driver: %s", SDL_GetCurrentAudioDriver());
   static int volume = 10;
   if (ImGui::SliderInt("Volume", &volume, 0, AudioManager::MAX_VOLUME))
-    this->audioManager->setVolume(volume);
+    this->audioManager.setVolume(volume);
   ImGui::Separator();
   static bool showDemoWindow = false;
   ImGui::Checkbox("Show demo window", &showDemoWindow);
@@ -99,11 +96,11 @@ void Game::drawDebugGui()
   ImGui::Text("Search:");
   ImGui::SameLine();
   ImGui::InputText("##", &searchText);
-  if (const std::unique_ptr<ActiveBeatmapInfo>& activeBeatmap = this->beatmapManager->getActiveBeatmap(); activeBeatmap)
+  if (const std::unique_ptr<ActiveBeatmapInfo>& activeBeatmap = this->beatmapManager.getActiveBeatmap(); activeBeatmap)
     ImGui::Text("Active beatmap: %s (%s)", activeBeatmap->getInfo().title.c_str(), activeBeatmap->getInfo().version.c_str());
   ImGui::BeginChild("##");
   uint32_t i = 0;
-  for (const BeatmapSet& beatmapSet : this->beatmapManager->getSets())
+  for (const BeatmapSet& beatmapSet : this->beatmapManager.getSets())
     for (const Beatmap& beatmap : beatmapSet.getBeatmaps())
     {
       i++;
@@ -112,8 +109,8 @@ void Game::drawDebugGui()
 
       if (ImGui::Button(std::format("{} ({})##{}", beatmap.title.c_str(), beatmap.version.c_str(), i).c_str()))
       {
-        this->beatmapManager->setActive(beatmap);
-        this->audioManager->playSong(beatmap.audio, beatmap.previewTime, AudioManager::Repeat::True);
+        this->beatmapManager.setActive(beatmap);
+        this->audioManager.playSong(beatmap.audio, beatmap.previewTime, AudioManager::Repeat::True);
       }
     }
   ImGui::EndChild();
